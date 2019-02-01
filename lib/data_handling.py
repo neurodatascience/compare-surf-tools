@@ -35,7 +35,7 @@ def check_processed_data(df,col_list,na_action):
     df_cols = df.columns
     if set(df_cols) != set(col_list):
         check_passed = False
-        print('Column name mismatched')
+        print('Column names mismatched')
 
     # Check missing values
     n_missing = df.isnull().sum().sum()
