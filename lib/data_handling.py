@@ -6,23 +6,49 @@
 import numpy as np
 import pandas as pd
 
-def load_processed_data(csv_dict, col_list, na_action):
+def combine_processed_data(data_dict, subject_ID_col, na_action):
     """ Reads CSV outputs from the processed MR images by pipelines such as FreeSurfer, ANTs, CIVET, etc.
     """ 
+    n_datasets = len(data_dict)
+    print('Number of datasets: {}'.format(n_datasets))
+    
+    # Find common columns and subjects
+    print('Finding common subject and columns')
+    common_cols = []
+    common_subs = []
+    for dataset_name in data_dict.keys():
+        data = data_dict[dataset_name]
 
-    n_csv = len(csv_dict)
-    print('Number of datasets: {}'.format(n_csv))
-    print('Number of columns: {}'.format(len(col_list)))
+        # common cols
+        if len(common_cols) == 0:
+            common_cols = list(data.columns)
+        else:
+            common_cols = list(set(common_cols) & set(data.columns))
+        
+        # common subs
+        if len(common_subs) == 0:
+            common_subs = list(data[subject_ID_col].values)
+        else:
+            common_subs = list(set(common_subs) & set(data[subject_ID_col].values))
 
+    common_roi_cols = common_cols[:] #.copy()
+    common_roi_cols.remove(subject_ID_col)
+
+    print('Number of common subjects and columns: {}, {}'.format(len(common_subs),len(common_cols)))
+
+    # Create master df after checking dataframe for missing column names for values
     df_concat = pd.DataFrame()
-    for c in csv_dict.keys():
-        print('\nReading {} csv'.format(c))
-        csv_data = pd.read_csv(csv_dict[c])
-        if check_processed_data(csv_data,col_list,na_action):
-            print('Basic CSV check passed')
-            csv_data['pipeline'] = np.tile(c,len(csv_data))
-            df_concat = df_concat.append(csv_data,sort=True)
-            print('Shape of the concat dataframe {}'.format(df_concat.shape))        
+    for dataset_name in data_dict.keys():
+        print('\nchecking {} dataframe'.format(dataset_name))
+        data = data_dict[dataset_name]
+        # Select only the common cols and subs
+        data = data[data[subject_ID_col].isin(common_subs)][common_cols]
+        print('Shape of the dataframe based on common cols and subs {}'.format(data.shape))
+        if check_processed_data(data,common_cols,na_action):
+            print('Basic data check passed')
+            data['pipeline'] = np.tile(dataset_name,len(data))
+            df_concat = df_concat.append(data,sort=True)
+            print('Shape of the concat dataframe {}'.format(df_concat.shape))
 
     return df_concat
 
@@ -50,3 +76,48 @@ def check_processed_data(df,col_list,na_action):
             check_passed = False
 
     return check_passed
+
+# Individual scripts to reformat / rename csvs from differnet pipelines
+# ANTs
+def standardize_ants_data(ants_data, subject_ID_col):
+    """ Takes csv from ANTs output and stadardizes column names for both left and right hemi
+    """
+    ants_useful_cols = ['Structure Name']
+    ants_to_std_naming_dict = {}
+    ants_to_std_naming_dict['Structure Name'] = subject_ID_col #'SubjID'
+    for roi in ants_data.columns:
+        prefix = None
+        name_split = roi.split(' ')
+        if name_split[0] == 'left':
+            prefix = 'L'
+        if name_split[0] == 'right':
+            prefix = 'R'
+
+        if prefix is not None:
+            ants_useful_cols.append(roi)
+            std_name = prefix + '_' + ''.join(name_split[1:])
+            ants_to_std_naming_dict[roi] = std_name
+
+    ants_data_std = ants_data[ants_useful_cols]
+    ants_data_std = ants_data_std.rename(columns=ants_to_std_naming_dict)
+
+    return ants_data_std
+
+# FS
+def standardize_fs_data(fs_data, subject_ID_col):
+    """ Takes csv from FS output and stadardizes column names for both left and right hemi
+    """
+    fs_useful_cols = [subject_ID_col] #'SubjID'
+    fs_col_renames = {}
+    for roi in fs_data.columns:
+        prefix = None
+        name_split = roi.split('_')
+        if name_split[0] in ['L','R']:
+            roi_rename = name_split[0] + '_' + name_split[1]
+            fs_useful_cols.append(roi_rename)
+            fs_col_renames[roi] = roi_rename
+            
+    fs_data_std = fs_data.rename(columns=fs_col_renames)
+
+    return fs_data_std
+
