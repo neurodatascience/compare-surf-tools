@@ -80,7 +80,7 @@ def check_processed_data(df,col_list,na_action):
 # Individual scripts to reformat / rename csvs from differnet pipelines
 # ANTs
 def standardize_ants_data(ants_data, subject_ID_col):
-    """ Takes csv from ANTs output and stadardizes column names for both left and right hemi
+    """ Takes df from ANTs output and stadardizes column names for both left and right hemi
     """
     ants_useful_cols = ['Structure Name']
     ants_to_std_naming_dict = {}
@@ -103,9 +103,9 @@ def standardize_ants_data(ants_data, subject_ID_col):
 
     return ants_data_std
 
-# FS
+# FS 5.1 and 5.3
 def standardize_fs_data(fs_data, subject_ID_col):
-    """ Takes csv from FS output and stadardizes column names for both left and right hemi
+    """ Takes df from FS output and stadardizes column names for both left and right hemi
     """
     fs_useful_cols = [subject_ID_col] #'SubjID'
     fs_col_renames = {}
@@ -121,3 +121,42 @@ def standardize_fs_data(fs_data, subject_ID_col):
 
     return fs_data_std
 
+# FS6.0 (CBrain)
+def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col):
+    """ Takes two dfs from FS output from CBrain and stadardizes column names for both left and right hemi
+    """
+    # Parse and combine fs60 left and right data
+    # left
+    fs60_data_lh['SiteID'] = fs60_data_lh['lh.aparc.thickness'].str.split('/',expand=True)[1]
+    fs60_data_lh['SiteID'] = fs60_data_lh['SiteID'].str.split('.',expand=True)[0]
+    fs60_data_lh[['runid',subject_ID_col]] = fs60_data_lh['SiteID'].str.split('_',n=1,expand=True)
+
+    # right
+    fs60_data_rh['SiteID'] = fs60_data_rh['rh.aparc.thickness'].str.split('/',expand=True)[1]
+    fs60_data_rh['SiteID'] = fs60_data_rh['SiteID'].str.split('.',expand=True)[0]
+    fs60_data_rh[['runid',subject_ID_col]] = fs60_data_rh['SiteID'].str.split('_',n=1,expand=True)
+
+    # merge left and right (use the tagged run1)
+    fs60_data_lh_filtered = fs60_data_lh[fs60_data_lh['runid']=='run1'][[col for col in fs60_data_lh.columns if '_thickness' in col]+[subject_ID_col]]
+    fs60_data_rh_filtered = fs60_data_rh[fs60_data_rh['runid']=='run1'][[col for col in fs60_data_rh.columns if '_thickness' in col]+[subject_ID_col]] 
+    fs60_data = pd.merge(fs60_data_lh_filtered, fs60_data_rh_filtered, on=subject_ID_col, how='inner')
+    print('shape of left and right merge fs6.0 df {}'.format(fs60_data.shape))
+
+    # rename columns
+    fs60_col_renames ={}
+    for roi in fs60_data.columns:
+        prefix = None
+        if roi not in [subject_ID_col,'lh_MeanThickness_thickness','rh_MeanThickness_thickness']:
+            name_split = roi.split('_')
+            if name_split[0] == 'lh':
+                prefix = 'L'
+                roi_rename = prefix + '_' + name_split[1]
+            if name_split[0] == 'rh':
+                prefix = 'R'
+                roi_rename = prefix + '_' + name_split[1]
+
+            fs60_col_renames[roi] = roi_rename
+            
+    fs60_data = fs60_data.rename(columns=fs60_col_renames)
+
+    return fs60_data
