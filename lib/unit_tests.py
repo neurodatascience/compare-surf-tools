@@ -5,7 +5,9 @@
 
 import numpy as np
 import pandas as pd
+import itertools
 from data_handling import *
+from data_stats import *
 
 # Data paths
 proj_dir = '/Users/nikhil/code/git_repos/compare-surf-tools/'
@@ -16,12 +18,13 @@ fs51_file = 'cortical_fs5.1_measuresenigma_thickavg.csv'
 fs60_lh_file = 'aparc_lh_thickness_table.txt'
 fs60_rh_file = 'aparc_rh_thickness_table.txt'
 
+# Global Vars
+subject_ID_col = 'SubjID'
 
 # test_1: stdize data
 test_name = 'test_1: stdize data'
 print('\n ------------- Running {} -------------'.format(test_name))
 
-subject_ID_col = 'SubjID'
 # ANTs
 ants_data = pd.read_csv(data_dir + ants_file, header=2)
 print('shape of ants data {}'.format(ants_data.shape))
@@ -62,4 +65,22 @@ data_dict = {'ants' : ants_data_std,
             'fs51' : fs51_data_std}
 
 na_action = 'drop' # options: ignore, drop; anything else will not use the dataframe for analysis. 
-test = combine_processed_data(data_dict, subject_ID_col, na_action)
+master_df = combine_processed_data(data_dict, subject_ID_col, na_action)
+
+
+# test_3: compute cross correlation
+test_name = 'test_3: compute cross correlation'
+print('\n ------------- Running {} -------------'.format(test_name))
+
+n_roi = 62
+possible_pairs = list(itertools.combinations(data_dict.keys(), 2))
+
+for pair in possible_pairs:
+    pipe1 = pair[0]
+    pipe2 = pair[1]
+    df1 = master_df[master_df['pipeline']==pipe1]
+    df2 = master_df[master_df['pipeline']==pipe2]
+
+    xcorr = cross_correlations(df1,df2,n_roi,subject_ID_col)
+    print('Avg cross correlation between {} & {} = {:4.2f}\n'.format(pipe1,pipe2,np.mean(xcorr)))
+    
