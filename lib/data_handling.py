@@ -50,7 +50,7 @@ def combine_processed_data(data_dict, subject_ID_col, na_action):
             df_concat = df_concat.append(data,sort=True)
             print('Shape of the concat dataframe {}'.format(df_concat.shape))
 
-    return df_concat
+    return df_concat, common_subs, common_roi_cols
 
 def check_processed_data(df,col_list,na_action):
     """ Checks if provided dataframe consists of required columns and no missing values

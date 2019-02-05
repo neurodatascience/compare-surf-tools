@@ -6,12 +6,16 @@
 import numpy as np
 import pandas as pd
 import itertools
+from sklearn import svm
+
 from data_handling import *
 from data_stats import *
+
 
 # Data paths
 proj_dir = '/Users/nikhil/code/git_repos/compare-surf-tools/'
 data_dir = proj_dir + 'data/'
+demograph_file = 'ABIDE_Phenotype.csv'
 ants_file = 'ABIDE_ants_thickness_data.csv'
 fs53_file = 'ABIDE_fs5.3_thickness.csv'
 fs51_file = 'cortical_fs5.1_measuresenigma_thickavg.csv' 
@@ -24,6 +28,10 @@ subject_ID_col = 'SubjID'
 # test_1: stdize data
 test_name = 'test_1: stdize data'
 print('\n ------------- Running {} -------------'.format(test_name))
+
+# Demographics and Dx
+demograph = pd.read_csv(data_dir + demograph_file)
+demograph = demograph.rename(columns={'Subject_ID':'SubjID'})
 
 # ANTs
 ants_data = pd.read_csv(data_dir + ants_file, header=2)
@@ -65,22 +73,46 @@ data_dict = {'ants' : ants_data_std,
             'fs51' : fs51_data_std}
 
 na_action = 'drop' # options: ignore, drop; anything else will not use the dataframe for analysis. 
-master_df = combine_processed_data(data_dict, subject_ID_col, na_action)
+master_df, common_subs, common_roi_cols = combine_processed_data(data_dict, subject_ID_col, na_action)
+
+# Add demographic columns to the master_df
+useful_demograph = demograph[['SubjID','SEX','AGE_AT_SCAN','DX_GROUP']]
+master_df = pd.merge(master_df, useful_demograph, how='left', on='SubjID')
+print('master df shape after adding demographic info {}'.format(master_df.shape))
 
 
 # test_3: compute cross correlation
 test_name = 'test_3: compute cross correlation'
 print('\n ------------- Running {} -------------'.format(test_name))
 
-n_roi = 62
 possible_pairs = list(itertools.combinations(data_dict.keys(), 2))
 
 for pair in possible_pairs:
     pipe1 = pair[0]
     pipe2 = pair[1]
-    df1 = master_df[master_df['pipeline']==pipe1]
-    df2 = master_df[master_df['pipeline']==pipe2]
+    df1 = master_df[master_df['pipeline']==pipe1][[subject_ID_col]+common_roi_cols]
+    df2 = master_df[master_df['pipeline']==pipe2][[subject_ID_col]+common_roi_cols]
 
-    xcorr = cross_correlations(df1,df2,n_roi,subject_ID_col)
+    xcorr = cross_correlations(df1,df2,subject_ID_col)
     print('Avg cross correlation between {} & {} = {:4.2f}\n'.format(pipe1,pipe2,np.mean(xcorr)))
     
+
+# # test_4: compute ML perf
+# test_name = 'test_4: compute ML perf'
+# print('\n ------------- Running {} -------------'.format(test_name))
+
+# input_cols = common_roi_cols
+# outcome_col = 'DX_GROUP'
+# clf = svm.SVC(kernel='linear')
+# ml_perf = getClassiferPerf(master_df,input_cols,outcome_col,clf)
+
+# test_5: compute stats_models perf
+test_name = 'test_5: compute stats_models perf'
+print('\n ------------- Running {} -------------'.format(test_name))
+
+roi_cols = common_roi_cols
+covar_cols = ['SEX','AGE_AT_SCAN']
+outcome_col = 'DX_GROUP'
+stat_model = 'logit'
+sm_perf = getStatModelPerf(master_df,roi_cols,covar_cols,outcome_col,stat_model)
+print('Shape of the stats_models results df {}'.format(sm_perf.shape))
