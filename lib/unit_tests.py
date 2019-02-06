@@ -76,8 +76,8 @@ na_action = 'drop' # options: ignore, drop; anything else will not use the dataf
 master_df, common_subs, common_roi_cols = combine_processed_data(data_dict, subject_ID_col, na_action)
 
 # Add demographic columns to the master_df
-useful_demograph = demograph[['SubjID','SEX','AGE_AT_SCAN','DX_GROUP']]
-master_df = pd.merge(master_df, useful_demograph, how='left', on='SubjID')
+useful_demograph = demograph[[subject_ID_col,'SEX','AGE_AT_SCAN','DX_GROUP']]
+master_df = pd.merge(master_df, useful_demograph, how='left', on=subject_ID_col)
 print('master df shape after adding demographic info {}'.format(master_df.shape))
 
 
