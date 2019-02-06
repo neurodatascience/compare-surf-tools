@@ -31,7 +31,7 @@ print('\n ------------- Running {} -------------'.format(test_name))
 
 # Demographics and Dx
 demograph = pd.read_csv(data_dir + demograph_file)
-demograph = demograph.rename(columns={'Subject_ID':'SubjID'})
+demograph = demograph.rename(columns={'Subject_ID':subject_ID_col})
 
 # ANTs
 ants_data = pd.read_csv(data_dir + ants_file, header=2)
