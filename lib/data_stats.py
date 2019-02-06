@@ -28,9 +28,9 @@ def cross_correlations(df1,df2,subject_ID_col):
     df2 = df2.rename(columns={'{}_df2'.format(subject_ID_col):subject_ID_col})
 
     concat_df = df1.merge(df2, on=subject_ID_col)
-    print('Shape of concatinated dataframe of two pipelines {}'.format(concat_df.shape))
+    #print('Shape of concatinated dataframe of two pipelines {}'.format(concat_df.shape))
     corr_mat = concat_df.corr()
-    print('Shape of corr mat {}'.format(corr_mat.shape))
+    #print('Shape of corr mat {}'.format(corr_mat.shape))
     xcorr = corr_mat.values[:n_roi,n_roi:2*n_roi].diagonal()
 
     return xcorr
@@ -55,8 +55,6 @@ def getClassiferPerf(df,input_cols,outcome_col,clf,n_splits=10,n_repeats=10):
         print('Pipeline {},  Accuracy mean:{:4.3f}, sd:{:4.3f}'.format(pipe,np.mean(acc),np.std(acc)))
     return scores_concat_df    
 
-
-#TODO
 def getStatModelPerf(df,roi_cols,covar_cols,outcome_col,stat_model):
     """ Creates either a OLS or Logit instance and computes t_vals, p_vals, model fit etc. 
         Does not support other models at the moment since you cannot pass an instance 
