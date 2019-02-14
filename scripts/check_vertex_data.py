@@ -37,11 +37,13 @@ for i in range(n_iter):
     else:
         df['SubjID'] = data.iloc[:,1]
         df['mean_thickness'] = data.iloc[:,1:].mean(axis=1)
-        df_stats.append(df)
+        df_stats = df_stats.append(df)
 
     del data
     skip_rows += batch_size
 
-print('Dataframe check for missing values passed {}'.format(missing_values))  
+if not missing_values
+    print('No missing values found in {}'.format(vertex_file))
+  
 df_stats.to_csv(stat_csv)
 print('Saving mean CT values in a CSV: {}'.format(stat_csv))
