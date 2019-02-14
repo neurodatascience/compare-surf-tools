@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+#
+# @author Nikhil Bhagawt
+# @date 13 Feb 2019
+
 import nibabel as nib
 from nibabel.freesurfer.io import read_morph_data
 import argparse
