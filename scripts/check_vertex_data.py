@@ -21,7 +21,7 @@ batch_size = args.batch
 stat_csv = args.output
 
 skip_rows = 0
-n_iter = subx//batch_size
+n_iter = subx//batch_size + 1
 missing_values = False
 
 print('Splitting {} subjects into batches of {} giving {} iterations'.format(subx,batch_size,n_iter))  
@@ -29,8 +29,12 @@ df_stats = pd.DataFrame(columns=['SubjID','mean_thickness'])
 df = pd.DataFrame(columns=['SubjID','mean_thickness'])
 
 for i in range(n_iter):
-    print('rows {}:{}'.format(skip_rows,skip_rows+batch_size))
-    data = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
+    if i == n_iter - 1:
+        data = pd.read_csv(vertex_file, header=None, skiprows = skip_rows)
+    else: 
+        data = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
+     
+    print('rows {}:{}'.format(skip_rows,skip_rows+len(data)))
     if data.isnull().values.any():
         missing_values = True
         print('Missing values in one of the rows between {}:{}'.format(skip_rows, skip_rows+batch_size))
@@ -42,7 +46,7 @@ for i in range(n_iter):
     del data
     skip_rows += batch_size
 
-if not missing_values
+if not missing_values:
     print('No missing values found in {}'.format(vertex_file))
   
 df_stats.to_csv(stat_csv)
