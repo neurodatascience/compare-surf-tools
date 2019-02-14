@@ -5,6 +5,7 @@
 
 import numpy as np
 import pandas as pd
+import argparse
 
 # input parser
 parser = argparse.ArgumentParser(description='Check vertex-wise output from NaNs in batches (avoid memory issues)')
