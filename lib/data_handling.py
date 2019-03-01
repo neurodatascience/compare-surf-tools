@@ -98,8 +98,11 @@ def standardize_ants_data(ants_data, subject_ID_col):
             std_name = prefix + '_' + ''.join(name_split[1:])
             ants_to_std_naming_dict[roi] = std_name
 
-    ants_data_std = ants_data[ants_useful_cols]
+    ants_data_std = ants_data[ants_useful_cols].copy()
     ants_data_std = ants_data_std.rename(columns=ants_to_std_naming_dict)
+    
+    # Splitting SubjID column to ignore site name
+    _, ants_data_std[subject_ID_col] = ants_data_std[subject_ID_col].str.split('_', 1).str
 
     return ants_data_std
 
@@ -117,8 +120,10 @@ def standardize_fs_data(fs_data, subject_ID_col):
             fs_useful_cols.append(roi_rename)
             fs_col_renames[roi] = roi_rename
             
-    fs_data_std = fs_data.rename(columns=fs_col_renames)
+    fs_data_std = fs_data.rename(columns=fs_col_renames).copy()
 
+    # Splitting SubjID column to ignore site name
+    _, fs_data_std[subject_ID_col] = fs_data_std[subject_ID_col].str.split('_', 1).str
     return fs_data_std
 
 # FS6.0 (CBrain)
@@ -126,20 +131,11 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col):
     """ Takes two dfs from FS output from CBrain and stadardizes column names for both left and right hemi
     """
     # Parse and combine fs60 left and right data
-    # left
-    fs60_data_lh['SiteID'] = fs60_data_lh['lh.aparc.thickness'].str.split('/',expand=True)[1]
-    fs60_data_lh['SiteID'] = fs60_data_lh['SiteID'].str.split('.',expand=True)[0]
-    fs60_data_lh[['runid',subject_ID_col]] = fs60_data_lh['SiteID'].str.split('_',n=1,expand=True)
-
-    # right
-    fs60_data_rh['SiteID'] = fs60_data_rh['rh.aparc.thickness'].str.split('/',expand=True)[1]
-    fs60_data_rh['SiteID'] = fs60_data_rh['SiteID'].str.split('.',expand=True)[0]
-    fs60_data_rh[['runid',subject_ID_col]] = fs60_data_rh['SiteID'].str.split('_',n=1,expand=True)
-
-    # merge left and right (use the tagged run1)
-    fs60_data_lh_filtered = fs60_data_lh[fs60_data_lh['runid']=='run1'][[col for col in fs60_data_lh.columns if '_thickness' in col]+[subject_ID_col]]
-    fs60_data_rh_filtered = fs60_data_rh[fs60_data_rh['runid']=='run1'][[col for col in fs60_data_rh.columns if '_thickness' in col]+[subject_ID_col]] 
-    fs60_data = pd.merge(fs60_data_lh_filtered, fs60_data_rh_filtered, on=subject_ID_col, how='inner')
+    
+    fs60_data_lh = fs60_data_lh.rename(columns={'lh.aparc.thickness':subject_ID_col})
+    fs60_data_rh = fs60_data_rh.rename(columns={'rh.aparc.thickness':subject_ID_col})
+    
+    fs60_data = pd.merge(fs60_data_lh, fs60_data_rh, on=subject_ID_col, how='inner')
     print('shape of left and right merge fs6.0 df {}'.format(fs60_data.shape))
 
     # rename columns
@@ -157,6 +153,8 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col):
 
             fs60_col_renames[roi] = roi_rename
             
-    fs60_data = fs60_data.rename(columns=fs60_col_renames)
-
-    return fs60_data
+    fs60_data_std = fs60_data.rename(columns=fs60_col_renames).copy()
+    
+    # Splitting SubjID column to ignore site name
+    _, fs60_data_std[subject_ID_col] = fs60_data_std[subject_ID_col].str.split('-', 1).str
+    return fs60_data_std
