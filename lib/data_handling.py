@@ -138,14 +138,6 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col, aparc='apa
     fs60_data = pd.merge(fs60_data_lh, fs60_data_rh, on=subject_ID_col, how='inner')
     print('shape of left and right merge fs6.0 df {}'.format(fs60_data.shape))
 
-    if aparc == 'aparc':
-        roi_split_idx = 1
-    elif aparc == 'aparc.a2009s':
-        roi_split_idx = 2
-    else:
-        roi_split_idx = 0
-        print('unknown parcellation atlas')
-
     # rename columns
     fs60_col_renames ={}
     for roi in fs60_data.columns:
@@ -154,10 +146,20 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col, aparc='apa
             name_split = roi.split('_')
             if name_split[0] == 'lh':
                 prefix = 'L'
-                roi_rename = prefix + '_' + name_split[roi_split_idx]
+                if aparc == 'aparc':
+                    roi_rename = prefix + '_' + name_split[1]
+                else:
+                    name_split = roi.split('_',1)[1].rsplit('_',1)
+                    roi_rename = prefix + '_' + name_split[0]
+
             if name_split[0] == 'rh':
                 prefix = 'R'
-                roi_rename = prefix + '_' + name_split[roi_split_idx]
+                if aparc == 'aparc':
+                    roi_rename = prefix + '_' + name_split[1]
+                else:
+                    name_split = roi.split('_',1)[1].rsplit('_',1)
+                    roi_rename = prefix + '_' + name_split[0]
+                
 
             fs60_col_renames[roi] = roi_rename
             
