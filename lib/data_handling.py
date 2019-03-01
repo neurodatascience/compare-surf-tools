@@ -127,16 +127,24 @@ def standardize_fs_data(fs_data, subject_ID_col):
     return fs_data_std
 
 # FS6.0 (CBrain)
-def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col):
+def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col, aparc='aparc'):
     """ Takes two dfs from FS output from CBrain and stadardizes column names for both left and right hemi
     """
     # Parse and combine fs60 left and right data
     
-    fs60_data_lh = fs60_data_lh.rename(columns={'lh.aparc.thickness':subject_ID_col})
-    fs60_data_rh = fs60_data_rh.rename(columns={'rh.aparc.thickness':subject_ID_col})
+    fs60_data_lh = fs60_data_lh.rename(columns={'lh.{}.thickness'.format(aparc):subject_ID_col})
+    fs60_data_rh = fs60_data_rh.rename(columns={'rh.{}.thickness'.format(aparc):subject_ID_col})
     
     fs60_data = pd.merge(fs60_data_lh, fs60_data_rh, on=subject_ID_col, how='inner')
     print('shape of left and right merge fs6.0 df {}'.format(fs60_data.shape))
+
+    if aparc == 'aparc':
+        roi_split_idx = 1
+    elif aparc == 'aparc.a2009s':
+        roi_split_idx = 2
+    else:
+        roi_split_idx = 0
+        print('unknown parcellation atlas')
 
     # rename columns
     fs60_col_renames ={}
@@ -146,10 +154,10 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col):
             name_split = roi.split('_')
             if name_split[0] == 'lh':
                 prefix = 'L'
-                roi_rename = prefix + '_' + name_split[1]
+                roi_rename = prefix + '_' + name_split[roi_split_idx]
             if name_split[0] == 'rh':
                 prefix = 'R'
-                roi_rename = prefix + '_' + name_split[1]
+                roi_rename = prefix + '_' + name_split[roi_split_idx]
 
             fs60_col_renames[roi] = roi_rename
             
