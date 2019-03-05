@@ -143,23 +143,19 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col, aparc='apa
     for roi in fs60_data.columns:
         prefix = None
         if roi not in [subject_ID_col,'lh_MeanThickness_thickness','rh_MeanThickness_thickness']:
-            name_split = roi.split('_')
-            if name_split[0] == 'lh':
+            if roi.split('_',1)[0] == 'lh':
                 prefix = 'L'
-                if aparc == 'aparc':
-                    roi_rename = prefix + '_' + name_split[1]
-                else:
-                    name_split = roi.split('_',1)[1].rsplit('_',1)
-                    roi_rename = prefix + '_' + name_split[0]
-
-            if name_split[0] == 'rh':
+            elif roi.split('_',1)[0] == 'rh':
                 prefix = 'R'
-                if aparc == 'aparc':
-                    roi_rename = prefix + '_' + name_split[1]
-                else:
-                    name_split = roi.split('_',1)[1].rsplit('_',1)
-                    roi_rename = prefix + '_' + name_split[0]
-                
+            else:
+                print('Unknown prefix for roi {}'.format(roi))
+            
+            if aparc == 'aparc':
+                roi_rename = prefix + '_' + roi.split('_',1)[1].rsplit('_',1)[0]
+            elif aparc == 'aparc.Glasseratlas':
+                roi_rename = roi.split('_',1)[1].rsplit('_',1)[0]
+            else:
+                roi_rename = prefix + '_' + roi.split('_',1)[1].rsplit('_',1)[0]
 
             fs60_col_renames[roi] = roi_rename
             
