@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import RepeatedStratifiedKFold
 import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 def cross_correlations(df1,df2,subject_ID_col):
     """ Computes correlation between features produced by two pipelines 
@@ -55,7 +56,7 @@ def getClassiferPerf(df,input_cols,outcome_col,clf,n_splits=10,n_repeats=10):
         print('Pipeline {},  Accuracy mean:{:4.3f}, sd:{:4.3f}'.format(pipe,np.mean(acc),np.std(acc)))
     return scores_concat_df    
 
-def getStatModelPerf(df,roi_cols,covar_cols,outcome_col,stat_model):
+def getStatModelPerf(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,stat_model):
     """ Creates either a OLS or Logit instance and computes t_vals, p_vals, model fit etc. 
         Does not support other models at the moment since you cannot pass an instance 
         of a stats_models without providing X and Y. 
@@ -77,21 +78,33 @@ def getStatModelPerf(df,roi_cols,covar_cols,outcome_col,stat_model):
             scores_df = pd.DataFrame(columns= ['roi','pipeline','t_val','p_val'])
             t_val_list = []
             p_val_list = []
+            covar_string = ''
+            if len(covar_continuous_cols) > 0:
+                for covar in covar_continuous_cols:
+                    covar_string = covar_string + ' + {}'.format(covar)
+
+            if len(covar_cat_cols) > 0:
+                for covar in covar_cat_cols:
+                    covar_string = covar_string + ' + C({})'.format(covar)
+
             for roi in roi_cols:
-                input_cols = [roi] + covar_cols
+                input_cols = [outcome_col, roi] + covar_continuous_cols + covar_cat_cols
                 X = sm_df[input_cols]
+                formula_string = '{} ~ {}{}'.format(outcome_col,roi,covar_string)
+
                 if stat_model.lower() == 'logit':
-                    y = pd.get_dummies(sm_df[outcome_col]).values[:,0]
-                    model = sm.Logit(y,X)
+                    model = smf.logit(formula=formula_string,data=X)
+
                 elif stat_model.lower() == 'ols':
-                    y = sm_df[outcome_col].values
-                    model = sm.OLS(y,X)
+                    model = smf.ols(formula=formula_string,data=X)
 
                 results = model.fit(disp=0)
-                t_val = results.tvalues[0] # just for ROI
-                p_val = results.pvalues[0] # just for ROI
+                t_val = results.tvalues[roi] # just for ROI
+                p_val = results.pvalues[roi] # just for ROI
                 t_val_list.append(t_val)
                 p_val_list.append(p_val)
+
+            print('Example statsmodel run:\n {}'.format(formula_string))
 
             scores_df['roi'] = roi_cols
             scores_df['pipeline'] = np.tile(pipe, len(roi_cols))

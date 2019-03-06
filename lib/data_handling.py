@@ -157,6 +157,9 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col, aparc='apa
             else:
                 roi_rename = prefix + '_' + roi.split('_',1)[1].rsplit('_',1)[0]
 
+            # Replace & with 'and' and '-' with '_', otherwise it breaks parsing in statsmodels
+            roi_rename = roi_rename.replace('&', '_and_')
+            roi_rename = roi_rename.replace('-', '_')
             fs60_col_renames[roi] = roi_rename
             
     fs60_data_std = fs60_data.rename(columns=fs60_col_renames).copy()
