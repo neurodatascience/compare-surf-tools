@@ -37,7 +37,7 @@ def cross_correlations(df1,df2,subject_ID_col):
     return xcorr
 
 
-def getClassiferPerf(df,input_cols,outcome_col,clf,n_splits=10,n_repeats=10):
+def getClassiferPerf(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,clf,n_splits=10,n_repeats=10):
     """ Takes a classifier instance and computes cross val scores on repeated stratified KFold
         on all pipelines listed in the df
     """
@@ -46,8 +46,21 @@ def getClassiferPerf(df,input_cols,outcome_col,clf,n_splits=10,n_repeats=10):
     scores_concat_df = pd.DataFrame(columns=['pipeline','Acc'])
     for pipe in pipelines:
         ml_df = df[df['pipeline']==pipe]
-        X = ml_df[input_cols].values
+        X = ml_df[roi_cols].values
+
+        #TODO handle covariates 
+        if len(covar_continuous_cols) > 0:
+            X_continuous_covar = ml_df[covar_continuous_cols].values
+            print('Using {} continuous covar'.format(len(covar_continuous_cols)))
+            X = np.hstack((X, X_continuous_covar))
+        if len(covar_cat_cols) > 0:
+            X_cat_covar = pd.get_dummies(ml_df[covar_cat_cols]).values
+            print('Using {} col for {} cat covar'.format(len(covar_cat_cols),X_cat_covar.shape[1]))
+            X = np.hstack((X, X_cat_covar))
+
         y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
+
+        print('Data shapes X {}, y {} ({})'.format(X.shape, len(y), list(ml_df[outcome_col].value_counts())))
         acc = cross_val_score(clf, X, y, cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats))
         scores_df = pd.DataFrame(columns=['pipeline','Acc'])
         scores_df['pipeline'] = np.tile(pipe,len(acc))
@@ -55,6 +68,9 @@ def getClassiferPerf(df,input_cols,outcome_col,clf,n_splits=10,n_repeats=10):
         scores_concat_df = scores_concat_df.append(scores_df)
         print('Pipeline {},  Accuracy mean:{:4.3f}, sd:{:4.3f}'.format(pipe,np.mean(acc),np.std(acc)))
     return scores_concat_df    
+
+
+
 
 def getStatModelPerf(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,stat_model):
     """ Creates either a OLS or Logit instance and computes t_vals, p_vals, model fit etc. 
