@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import RepeatedStratifiedKFold
+from sklearn.model_selection import ShuffleSplit
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
@@ -37,18 +38,17 @@ def cross_correlations(df1,df2,subject_ID_col):
     return xcorr
 
 
-def getClassiferPerf(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,clf,n_splits=10,n_repeats=10):
+def getMLModelPerf(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,clf,n_splits=10,n_repeats=10):
     """ Takes a classifier instance and computes cross val scores on repeated stratified KFold
         on all pipelines listed in the df
     """
     pipelines = df['pipeline'].unique()
     print('Running ML classifer on {} pipelines'.format(len(pipelines)))
-    scores_concat_df = pd.DataFrame(columns=['pipeline','Acc'])
+    scores_concat_df = pd.DataFrame()
     for pipe in pipelines:
         ml_df = df[df['pipeline']==pipe]
         X = ml_df[roi_cols].values
 
-        #TODO handle covariates 
         if len(covar_continuous_cols) > 0:
             X_continuous_covar = ml_df[covar_continuous_cols].values
             print('Using {} continuous covar'.format(len(covar_continuous_cols)))
@@ -58,15 +58,26 @@ def getClassiferPerf(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_co
             print('Using {} col for {} cat covar'.format(len(covar_cat_cols),X_cat_covar.shape[1]))
             X = np.hstack((X, X_cat_covar))
 
-        y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
+        if model_type.lower() == 'classification':
+            y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
+            print('Data shapes X {}, y {} ({})'.format(X.shape, len(y), list(ml_df[outcome_col].value_counts())))  
+            perf_metric = 'roc_auc'
+            cv = cv=RepeatedStratifiedKFold(n_splits=n_splits,n_repeats=n_repeats,random_state=0)
+        elif model_type.lower() == 'regression':
+            y = ml_df[outcome_col].values
+            print('Data shapes X {}, y {} ({:3.2f}m, {:3.2f}sd)'.format(X.shape, len(y), np.mean(y),np.std(y)))   
+            perf_metric = 'neg_mean_squared_error'
+            cv = ShuffleSplit(n_splits=n_splits*n_repeats, random_state=0)
+        else:
+            print('unknown model type {} (needs to be classification or regression)'.format(model_type))
 
-        print('Data shapes X {}, y {} ({})'.format(X.shape, len(y), list(ml_df[outcome_col].value_counts())))
-        acc = cross_val_score(clf, X, y, cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats))
-        scores_df = pd.DataFrame(columns=['pipeline','Acc'])
-        scores_df['pipeline'] = np.tile(pipe,len(acc))
-        scores_df['Acc'] = acc
+        print('Using {} model with perf metric {}'.format(model_type, perf_metric))
+        perf = cross_val_score(clf, X, y, scoring=perf_metric,cv=cv)
+        scores_df = pd.DataFrame(columns=['pipeline',perf_metric])
+        scores_df['pipeline'] = np.tile(pipe,len(perf))
+        scores_df[perf_metric] = perf
         scores_concat_df = scores_concat_df.append(scores_df)
-        print('Pipeline {},  Accuracy mean:{:4.3f}, sd:{:4.3f}'.format(pipe,np.mean(acc),np.std(acc)))
+        print('Pipeline {},  Perf mean:{:4.3f}, sd:{:4.3f}'.format(pipe,np.mean(perf),np.std(perf)))
     return scores_concat_df    
 
 
