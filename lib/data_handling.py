@@ -102,7 +102,7 @@ def standardize_ants_data(ants_data, subject_ID_col):
     ants_data_std = ants_data_std.rename(columns=ants_to_std_naming_dict)
     
     # Splitting SubjID column to ignore site name
-    _, ants_data_std[subject_ID_col] = ants_data_std[subject_ID_col].str.split('_', 1).str
+    _, ants_data_std[subject_ID_col] = ants_data_std[subject_ID_col].str.rsplit('_', 1).str
 
     return ants_data_std
 
@@ -123,7 +123,7 @@ def standardize_fs_data(fs_data, subject_ID_col):
     fs_data_std = fs_data.rename(columns=fs_col_renames).copy()
 
     # Splitting SubjID column to ignore site name
-    _, fs_data_std[subject_ID_col] = fs_data_std[subject_ID_col].str.split('_', 1).str
+    _, fs_data_std[subject_ID_col] = fs_data_std[subject_ID_col].str.rsplit('_', 1).str
     return fs_data_std
 
 # FS6.0 (CBrain)
