@@ -4,16 +4,17 @@
 # @date 12 March 2019
 
 import sys
+import os
 import numpy as np
 import pandas as pd
 import itertools
+import argparse
 
-
-def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing):
+def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
     """ Parser for surfaces/sub-0050106_T1w_DKT_lobe_thickness_tlink_30mm_left.dat files from CIVET 2.1 output
         Uses DKT atlas. 
     """
-    civet_subject_file = subject_dir + 'surfaces/sub-{}_T1w_DKT_lobe_thickness_tlink_{}_{}.dat'
+    civet_subject_file = subject_dir + 'surfaces/sub-{}_T1w_DKT_lobe_thickness_tlink_{}mm_{}.dat'
     civet_subject_both_hemi = pd.DataFrame()
     for hemi in ['left','right']:
         civet_subject = pd.read_csv(civet_subject_file.format(subject_id,subject_id,smoothing,hemi),header=1,
@@ -32,24 +33,41 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing):
     return civet_subject_both_hemi
 
 
+# input parser
+parser = argparse.ArgumentParser(description='Read DKT output from CIVET2.1 and create group table')
+parser.add_argument('-p','--path',help='path for subject dir from CIVET output')
+parser.add_argument('-s','--smoothing',help='smoothing kernel (20,30,40mm)')
+parser.add_argument('-n','--nameprefix',help='naming prefix for subjects used by civet')
+parser.add_argument('-a','--atlas',help='atlas path for (AAL or DKT)') #DKT only atm
+parser.add_argument('-o','--output',help='output csv for average thickness')
 
-# TODO
-# Replace below with argparse
+args = parser.parse_args()
+civet_out_dir = args.path
+name_prefix = args.nameprefix
+atlas_file = args.atlas
+smoothing = args.smoothing
+save_path = args.output
 
-civet_test_dir = '/home/nikhil/projects/CT_reproduce/data/civet_test_dir/'
-civet_subject_dir = civet_test_dir + 'test_subjects/sub-{}_T1w/'
-civet_dkt_atlas_file = civet_test_dir + 'DKT/DKTatlas40.labels'
+#civet_subject_dir = civet_test_dir + 'test_subjects/sub-{}_T1w/'
+#civet_dkt_atlas_file = civet_test_dir + 'DKT/DKTatlas40.labels'
+#subject_ids = ['0050106','0050106']
 
-civet_dkt_atlas = pd.read_csv(civet_dkt_atlas_file,header=None,delim_whitespace=True)
+all_dirs = next(os.walk(civet_out_dir))[1]
+sub_dirs = [for d in all_dirs if d.startswith(name_prefix)]
+
+print('Lookig for subjects in {} ...'.format(civet_out_dir))
+print('Number of subject directories found {}'.format(len(sub_dirs)))
+
+# Read atlas file
+print('Reading atlas from {}'.format(atlas_file))
+civet_dkt_atlas = pd.read_csv(atlas_file,header=None,delim_whitespace=True)
 civet_dkt_atlas.columns = ['roi_id','roi_name']
 civet_dkt_atlas['roi_id'] = civet_dkt_atlas['roi_id'].astype('int')
 
-subject_ids = ['0050106','0050106']
-smoothing = '30mm'
-
 civet_master_df = pd.DataFrame()
 
-for subject_id in subject_ids:
+for sub_dir in sub_dirs:
+    subject_id = sub_dir.split('-',1)[1].split('_',1)[0]
     civet_subject_df = getCIVETSubjectValues(civet_dkt_atlas, civet_subject_dir, subject_id, smoothing)
     civet_master_df = civet_master_df.append(civet_subject_df)
 
