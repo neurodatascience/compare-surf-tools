@@ -17,8 +17,9 @@ def combine_processed_data(data_dict, subject_ID_col, na_action):
     common_cols = []
     common_subs = []
     for dataset_name in data_dict.keys():
+        print('dataset : {}'.format(dataset_name))
         data = data_dict[dataset_name]
-
+        
         # common cols
         if len(common_cols) == 0:
             common_cols = list(data.columns)
@@ -30,6 +31,7 @@ def combine_processed_data(data_dict, subject_ID_col, na_action):
             common_subs = list(data[subject_ID_col].values)
         else:
             common_subs = list(set(common_subs) & set(data[subject_ID_col].values))
+        print('common subs: {}'.format(len(common_subs)))
 
     common_roi_cols = common_cols[:] #.copy()
     common_roi_cols.remove(subject_ID_col)
@@ -78,6 +80,23 @@ def check_processed_data(df,col_list,na_action):
     return check_passed
 
 # Individual scripts to reformat / rename csvs from differnet pipelines
+# CIVET 2.1
+def standardize_civet_data(civet_data, subject_ID_col, dkt_roi_map):
+    """ Takes df from ANTs output and stadardizes column names for both left and right hemi
+        Uses dkt naming dictionary to map freesurfer names onto civet names
+    """
+    civet_cols = civet_data.columns
+    civet_to_std_naming_dict = {}
+    for col in civet_cols:
+        if col != subject_ID_col:
+            col_name,col_hemi = col.split('.',1)[0],col.split('.',1)[1]
+            fs_name = dkt_roi_map[dkt_roi_map['CIVET']==col_name]['Freesurfer'].values[0]
+            new_col_name = col_hemi + '_' + fs_name
+            civet_to_std_naming_dict[col] = new_col_name
+        
+    civet_data_std = civet_data.rename(columns=civet_to_std_naming_dict)
+    return civet_data_std
+
 # ANTs
 def standardize_ants_data(ants_data, subject_ID_col):
     """ Takes df from ANTs output and stadardizes column names for both left and right hemi
