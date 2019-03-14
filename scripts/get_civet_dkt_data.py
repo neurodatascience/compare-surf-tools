@@ -16,6 +16,8 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
     """
     civet_subject_file = subject_dir + '/surfaces/sub-{}_T1w_DKT_lobe_thickness_tlink_{}mm_{}.dat'
     civet_subject_both_hemi = pd.DataFrame()
+    left_check = False
+    right_check = False
     
     for hemi in ['left','right']:    
         try:
@@ -26,16 +28,22 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
             print("File doesn't exist {}".format(civet_subject_file.format(subject_id,smoothing,hemi)))
     
         else:
+            if hemi=='left':
+                left_check = True
+            if hemi=='right':
+                right_check = True
+
             civet_subject = civet_subject[['#','Label']]
             civet_subject = civet_subject.rename(columns={'#':'roi_id','Label':subject_id})
             civet_subject = civet_subject[civet_subject['roi_id']!='Total']
             civet_subject_both_hemi = civet_subject_both_hemi.append(civet_subject)
 
-    civet_subject_both_hemi['roi_id'] = civet_subject_both_hemi['roi_id'].astype('int') 
-    civet_subject_both_hemi = pd.merge(atlas_df,civet_subject_both_hemi,on='roi_id')
-    
-    civet_subject_both_hemi = civet_subject_both_hemi[['roi_name',subject_id]].set_index('roi_name').T
-    civet_subject_both_hemi = civet_subject_both_hemi.rename_axis('SubjID').rename_axis(None, 1)
+    if (left_check & right_check):
+        civet_subject_both_hemi['roi_id'] = civet_subject_both_hemi['roi_id'].astype('int') 
+        civet_subject_both_hemi = pd.merge(atlas_df,civet_subject_both_hemi,on='roi_id')
+        
+        civet_subject_both_hemi = civet_subject_both_hemi[['roi_name',subject_id]].set_index('roi_name').T
+        civet_subject_both_hemi = civet_subject_both_hemi.rename_axis('SubjID').rename_axis(None, 1)
 
     return civet_subject_both_hemi
 
