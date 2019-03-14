@@ -73,7 +73,7 @@ civet_master_df = pd.DataFrame()
 
 for sub_dir in sub_dirs:
     sub_dir_path = '{}/{}'.format(civet_out_dir,sub_dir)
-    subject_id = sub_dir.split('-',1)[1].split('_',1)[0]
+    subject_id = str(sub_dir.split('-',1)[1].split('_',1)[0])
     civet_subject_df = getCIVETSubjectValues(civet_atlas, sub_dir_path, subject_id, smoothing)
     civet_master_df = civet_master_df.append(civet_subject_df)
 
