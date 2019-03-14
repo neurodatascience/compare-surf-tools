@@ -17,7 +17,7 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
     civet_subject_file = subject_dir + '/surfaces/sub-{}_T1w_DKT_lobe_thickness_tlink_{}mm_{}.dat'
     civet_subject_both_hemi = pd.DataFrame()
     
-	for hemi in ['left','right']:    
+    for hemi in ['left','right']:    
         try:
             civet_subject = pd.read_csv(civet_subject_file.format(subject_id,smoothing,hemi),header=1,
                                         delim_whitespace=True)
