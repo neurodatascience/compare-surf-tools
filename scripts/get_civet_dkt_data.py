@@ -31,7 +31,7 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
             civet_subject_both_hemi = civet_subject_both_hemi.rename_axis('SubjID').rename_axis(None, 1)
             
         except FileNotFoundError:
-            print("File doesn't exist {}".format(civet_subject_file))
+            print("File doesn't exist {}".format(civet_subject_file.format(subject_id,smoothing,hemi)))
         else:
             break
 
@@ -73,7 +73,7 @@ civet_master_df = pd.DataFrame()
 
 for sub_dir in sub_dirs:
     sub_dir_path = '{}/{}'.format(civet_out_dir,sub_dir)
-    subject_id = str(sub_dir.split('-',1)[1].split('_',1)[0])
+    subject_id = sub_dir.split('-',1)[1].split('_',1)[0]
     civet_subject_df = getCIVETSubjectValues(civet_atlas, sub_dir_path, subject_id, smoothing)
     civet_master_df = civet_master_df.append(civet_subject_df)
 
