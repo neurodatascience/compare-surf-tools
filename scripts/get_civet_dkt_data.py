@@ -16,10 +16,16 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
     """
     civet_subject_file = subject_dir + '/surfaces/sub-{}_T1w_DKT_lobe_thickness_tlink_{}mm_{}.dat'
     civet_subject_both_hemi = pd.DataFrame()
-    try:
+    
 	for hemi in ['left','right']:    
+        try:
             civet_subject = pd.read_csv(civet_subject_file.format(subject_id,smoothing,hemi),header=1,
                                         delim_whitespace=True)
+            
+        except FileNotFoundError:
+            print("File doesn't exist {}".format(civet_subject_file.format(subject_id,smoothing,hemi)))
+    
+        else:
             civet_subject = civet_subject[['#','Label']]
             civet_subject = civet_subject.rename(columns={'#':'roi_id','Label':subject_id})
             civet_subject = civet_subject[civet_subject['roi_id']!='Total']
@@ -30,10 +36,6 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
             civet_subject_both_hemi = civet_subject_both_hemi[['roi_name',subject_id]].set_index('roi_name').T
             civet_subject_both_hemi = civet_subject_both_hemi.rename_axis('SubjID').rename_axis(None, 1)
             print(hemi, civet_subject_both_hemi.shape)
-    except FileNotFoundError:
-        print("File doesn't exist {}".format(civet_subject_file.format(subject_id,smoothing,hemi)))
-    else:
-        break
 
     return civet_subject_both_hemi
 
