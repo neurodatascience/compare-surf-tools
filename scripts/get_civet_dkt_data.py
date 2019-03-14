@@ -30,12 +30,12 @@ def getCIVETSubjectValues(atlas_df, subject_dir, subject_id, smoothing='30'):
             civet_subject = civet_subject.rename(columns={'#':'roi_id','Label':subject_id})
             civet_subject = civet_subject[civet_subject['roi_id']!='Total']
             civet_subject_both_hemi = civet_subject_both_hemi.append(civet_subject)
-            civet_subject_both_hemi['roi_id'] = civet_subject_both_hemi['roi_id'].astype('int') 
-            civet_subject_both_hemi = pd.merge(atlas_df,civet_subject_both_hemi,on='roi_id')
-            
-            civet_subject_both_hemi = civet_subject_both_hemi[['roi_name',subject_id]].set_index('roi_name').T
-            civet_subject_both_hemi = civet_subject_both_hemi.rename_axis('SubjID').rename_axis(None, 1)
-            print(hemi, civet_subject_both_hemi.shape)
+
+    civet_subject_both_hemi['roi_id'] = civet_subject_both_hemi['roi_id'].astype('int') 
+    civet_subject_both_hemi = pd.merge(atlas_df,civet_subject_both_hemi,on='roi_id')
+    
+    civet_subject_both_hemi = civet_subject_both_hemi[['roi_name',subject_id]].set_index('roi_name').T
+    civet_subject_both_hemi = civet_subject_both_hemi.rename_axis('SubjID').rename_axis(None, 1)
 
     return civet_subject_both_hemi
 
