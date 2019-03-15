@@ -19,25 +19,24 @@ def cross_correlations(df1,df2,subject_ID_col):
     """
     n_roi = len(df1.columns)-1 #cols=subject_ID + roi_cols
 
-    col_rename_dict_1 = {}
-    col_rename_dict_2 = {}
+    col_rename_dict = {} #Only need to rename on df
     
     for col in df1.columns:
-        col_rename_dict_1[col] = str(col) + '_df1' 
-        col_rename_dict_2[col] = str(col) + '_df2'
+        col_rename_dict[col] = str(col) + '_df2'
 
-    df1 = df1.rename(columns=col_rename_dict_1)
-    df2 = df2.rename(columns=col_rename_dict_2)
-    df1 = df1.rename(columns={'{}_df1'.format(subject_ID_col):subject_ID_col})
+    df2 = df2.rename(columns=col_rename_dict)
     df2 = df2.rename(columns={'{}_df2'.format(subject_ID_col):subject_ID_col})
 
     concat_df = df1.merge(df2, on=subject_ID_col)
     #print('Shape of concatinated dataframe of two pipelines {}'.format(concat_df.shape))
     corr_mat = concat_df.corr()
     #print('Shape of corr mat {}'.format(corr_mat.shape))
-    xcorr = corr_mat.values[:n_roi,n_roi:2*n_roi].diagonal()
+    xcorr_dig = corr_mat.values[:n_roi,n_roi:2*n_roi].diagonal()
+    xcorr_df = pd.DataFrame(columns=['ROI','correlation'])
+    xcorr_df['ROI'] = corr_mat.columns[:n_roi] 
+    xcorr_df['correlation'] = xcorr_dig
 
-    return xcorr
+    return xcorr_df
 
 # ML model perfs
 def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10):
