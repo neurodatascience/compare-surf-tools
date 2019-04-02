@@ -86,7 +86,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
 
     print('Using {} model with perf metric {}'.format(model_type, perf_metric))
     perf = cross_val_score(ml_model, X, y, scoring=perf_metric,cv=cv)
-    scores_df = pd.DataFrame(columns=['perf_metric'])
+    scores_df = pd.DataFrame(columns=[perf_metric])
     scores_df[perf_metric] = perf
     print(' Perf mean:{:4.3f}, sd:{:4.3f}'.format(np.mean(perf),np.std(perf)))
 
