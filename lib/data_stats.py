@@ -10,6 +10,7 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.model_selection import ShuffleSplit
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
+import statsmodels.stats.multitest as smm
 
 
 # Simple correlations of features
@@ -93,6 +94,11 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
     return scores_df    
 
 # Stat model perfs
+
+def getCorrectedPValues(pval_raw,alpha=0.05,method='fdr_i'):
+    rej, pval_corr = smm.multipletests(pval_raw, alpha=alpha, method=method)[:2]
+    return pval_corr
+
 def computePipelineStatsModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,stat_model):
     """ Compares performance of different pipeline outputs for a given ML Model
         Calls getStatModelPerf to get individual model performances
@@ -124,9 +130,10 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
         model_name_check = False
 
     if model_name_check:
-        scores_df = pd.DataFrame(columns= ['roi','t_val','p_val'])
+        scores_df = pd.DataFrame(columns= ['roi','t_val','p_val','p_val_corr'])
         t_val_list = []
         p_val_list = []
+      
         covar_string = ''
         if len(covar_continuous_cols) > 0:
             for covar in covar_continuous_cols:
@@ -150,16 +157,19 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
             else:
                 print('Unknown stats model {}'.format(stat_model))
 
-            results = model.fit(disp=0)
+            results = model.fit(disp=0) #default newton fails for smaller N (even smaller site N)
             t_val = results.tvalues[roi] # just for ROI
             p_val = results.pvalues[roi] # just for ROI
             t_val_list.append(t_val)
             p_val_list.append(p_val)
 
+        #FDR Correction
+        p_val_corr_list = getCorrectedPValues(p_val_list)
         print('Example statsmodel run:\n {}'.format(formula_string))
 
         scores_df['roi'] = roi_cols
         scores_df['t_val'] = t_val_list
         scores_df['p_val'] = p_val_list
+        scores_df['p_val_corr'] = p_val_corr_list
 
     return scores_df
