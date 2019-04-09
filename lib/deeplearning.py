@@ -62,24 +62,21 @@ class pipeline_AE(object):
             loss = tf.losses.mean_squared_error(self.output, self.preds)
         elif loss_type == 'cosine':
             loss = tf.losses.cosine_distance(tf.nn.l2_normalize(self.output, 0), tf.nn.l2_normalize(self.preds, 0), axis=0)    
-        elif loss_type == 'corr':
-            print('using corr loss')
-            # This doesn't work since it's not a well defined loss
-            #loss, update_op = tf.contrib.metrics.streaming_pearson_correlation(self.output, self.preds, name='pearson_r' )        
-            # Temp fix
-            output_std = self.output - tf.reduce_mean(self.output, 1, keep_dims=True) 
-            preds_std = self.preds - tf.reduce_mean(self.preds, 1, keep_dims=True)  
-            loss = tf.losses.cosine_distance(tf.nn.l2_normalize(output_std, 0), tf.nn.l2_normalize(preds_std, 0), axis=0)**2
+        elif loss_type == 'corr':            
+            # Line below doesn't work since it's not a well defined loss
+            # loss, update_op = tf.contrib.metrics.streaming_pearson_correlation(self.output, self.preds, name='pearson_r' )        
+            # Alternatively use zero centered cosine distance as loss
+            output_std = self.output - tf.reduce_mean(self.output, 1, keepdims=True) 
+            preds_std = self.preds - tf.reduce_mean(self.preds, 1, keepdims=True)  
+            loss = tf.maximum(0.0, tf.losses.cosine_distance(tf.nn.l2_normalize(output_std, 0), tf.nn.l2_normalize(preds_std, 0), axis=0)**2) 
         elif loss_type == 'inv_corr':
-            output_std = self.output - tf.reduce_mean(self.output, 1, keep_dims=True) 
-            preds_std = self.preds - tf.reduce_mean(self.preds, 1, keep_dims=True)  
+            output_std = self.output - tf.reduce_mean(self.output, 1, keepdims=True) 
+            preds_std = self.preds - tf.reduce_mean(self.preds, 1, keepdims=True)  
             loss = 1/(tf.losses.cosine_distance(tf.nn.l2_normalize(output_std, 0), tf.nn.l2_normalize(preds_std, 0), axis=0))**2
-
         else:
             print('Unknown loss type: {}'.format(loss_type))
             loss = None
 
-        print('loss {} {}'.format(loss_type, loss))     
         return loss
     
 # Other helper functions
