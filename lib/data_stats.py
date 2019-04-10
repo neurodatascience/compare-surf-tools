@@ -11,7 +11,7 @@ from sklearn.model_selection import ShuffleSplit
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import statsmodels.stats.multitest as smm
-
+from scipy.stats import pearsonr
 
 # Simple correlations of features
 def cross_correlations(df1,df2,subject_ID_col):
@@ -38,6 +38,17 @@ def cross_correlations(df1,df2,subject_ID_col):
     xcorr_df['correlation'] = xcorr_dig
 
     return xcorr_df
+
+# Significance of correlation between ROIs (within a given pipeline)
+
+def calculate_pvalues(df):
+    df = df.dropna()._get_numeric_data()
+    dfcols = pd.DataFrame(columns=df.columns)
+    pvalues = dfcols.transpose().join(dfcols, how='outer')
+    for r in df.columns:
+        for c in df.columns:
+            pvalues[r][c] = round(pearsonr(df[r], df[c])[1], 4)
+    return pvalues
 
 # ML model perfs
 def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10):
@@ -130,7 +141,8 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
         model_name_check = False
 
     if model_name_check:
-        scores_df = pd.DataFrame(columns= ['roi','t_val','p_val','p_val_corr'])
+        scores_df = pd.DataFrame(columns= ['roi','coef','t_val','p_val','p_val_corr'])
+        coef_list = []
         t_val_list = []
         p_val_list = []
       
@@ -158,8 +170,10 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
                 print('Unknown stats model {}'.format(stat_model))
 
             results = model.fit(disp=0) #default newton fails for smaller N (even smaller site N)
+            coef = results.params[roi] # just for ROI
             t_val = results.tvalues[roi] # just for ROI
             p_val = results.pvalues[roi] # just for ROI
+            coef_list.append(coef)
             t_val_list.append(t_val)
             p_val_list.append(p_val)
 
@@ -168,6 +182,7 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
         print('Example statsmodel run:\n {}'.format(formula_string))
 
         scores_df['roi'] = roi_cols
+        scores_df['coef'] = coef_list
         scores_df['t_val'] = t_val_list
         scores_df['p_val'] = p_val_list
         scores_df['p_val_corr'] = p_val_corr_list

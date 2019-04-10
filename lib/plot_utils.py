@@ -16,13 +16,15 @@ from PIL import ImageDraw
 mlab.options.offscreen = True
 
 
-def get_pysurfer_label_format(labels, aparc):
+def get_pysurfer_label_format(labels, aparc, betas=None):
     ''' Check label format from freesurfer tables and convert it to pysurfer format
         Main differences are 1) prefix of 'L' and 'R' vs format char 'b' 2) '&' char instead of the word 'and'
     '''
     labels_std_L = []
     labels_std_R = []
-    for label in labels:
+    betas_L = []
+    betas_R = []
+    for i, label in enumerate(labels):
         label_split = label.split('_',1)
         
         if aparc.lower() == 'glasser':
@@ -32,18 +34,21 @@ def get_pysurfer_label_format(labels, aparc):
         
         if label_split[0] == 'L':
             labels_std_L.append(label_std)
+            betas_L.append(betas[i])
         elif label_split[0] == 'R':
             labels_std_R.append(label_std)
+            betas_R.append(betas[i])
         else:
             print('unknown ROI label {}'.format(label))
             
-    return labels_std_L, labels_std_R
+    return labels_std_L, labels_std_R, betas_L, betas_R
 
 
-def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=1):
+def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=[]):
     """
     Creates a pysurfer brain, overlays surface parcellation, and colormaps given ROIs 
     Used for plotting signficant ROIs
+    If significance color (effect size / betas) are provided (in the same order as significant ROIs) then uses it as a colormap
     """
     brain = Brain(subject_id, hemi, surf, background="white",title=title,views=view)
 
@@ -63,19 +68,23 @@ def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,
             idx.append(names.index(roi))
 
         roi_value = np.zeros(len(names)) #np.random.randint(5, size=len(names)) #np.zeros(len(names))
-        roi_value[idx] = np.arange(2,len(idx)+2) #signifcance_color
+        if len(signifcance_color) == 0:
+            roi_value[idx] = np.arange(2,len(idx)+2) #random signifcance_color
+        else:
+            roi_value[idx] = signifcance_color
+            print('Using betas as colormap')
 
         print('number of significant rois {}'.format(len(signific_rois)))
             
         vtx_data = roi_value[labels]
             
         #Handle vertices that are not defined in the annotation.
-        vtx_data[labels == -1] = -1
+        vtx_data[labels == -1] = 0
 
         unique, counts = np.unique(vtx_data, return_counts=True)
         print('atlas: {}, signficant roi count: {}'.format(aparc, dict(zip(unique, counts))))
-        
-        brain.add_data(vtx_data,colormap="icefire", alpha=.8, colorbar=True)
+
+        brain.add_data(vtx_data,colormap="icefire", alpha=.8, colorbar=True, center=0)
     
 
     if not os.path.exists(save_dir):
