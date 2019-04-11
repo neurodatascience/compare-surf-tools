@@ -20,8 +20,11 @@ subx = args.NumberOfSubjects
 batch_size = args.batch
 stat_csv = args.output
 
+n_iter = subx//batch_size
+if subx%batch_size !=0:
+    n_iter += 1
+
 skip_rows = 0
-n_iter = subx//batch_size + 1
 missing_values = False
 
 print('Splitting {} subjects into batches of {} giving {} iterations'.format(subx,batch_size,n_iter))  
@@ -39,7 +42,7 @@ for i in range(n_iter):
         missing_values = True
         print('Missing values in one of the rows between {}:{}'.format(skip_rows, skip_rows+batch_size))
     else:
-        df['SubjID'] = data.iloc[:,1]
+        df['SubjID'] = data.iloc[:,0]
         df['mean_thickness'] = data.iloc[:,1:].mean(axis=1)
         df_stats = df_stats.append(df)
 
