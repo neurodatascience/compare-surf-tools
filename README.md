@@ -28,9 +28,9 @@ New dataset addition(s)
 
 ## Code
 Current:     
-notebooks: driver code to run analysis 
-lib: helper functions for parsing and analysis
-scripts: code to read pipeline output (civet2.1, fs6.0) 
+* notebooks: driver code to run analysis 
+* lib: helper functions for parsing and analysis
+* scripts: code to read pipeline output (civet2.1, fs6.0) 
 ```
 .
 ├──  notebooks           
