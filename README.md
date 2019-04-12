@@ -27,26 +27,24 @@ New dataset addition(s)
 
 
 ## Code
-Current: 
-
-* notebooks (driver code for running analysis) 
-    * run_pipeline_comparisons.ipynb 
-    * run_atlas_comparisons.ipynb
-    * import_QC_data.ipynb
-    * generate_plots.ipynb
-    * learn_pipeline_transforms.ipynb
-    
-* lib (helper functions for data parsing and running analysis)
-   * data_handling.py
-   * data_stats.py
-   * plot_utils.py
-   * deeplearning.py
-   
-* scripts (code to extract useful data from pipeline output) 
-    * get_dkt_data_civet.py 
-    * get_vertex_data_fs.py
-    * check_vertex_data.py
-
-
+Current:     
+```
+.
+├──  notebooks           
+│   ├── run_atlas_comparisons.ipynb
+│   ├── run_pipeline_comparisons.ipynb
+│   ├── import_QC_data.ipynb
+│   ├── generate_plots.ipynb
+│   └── learn_pipeline_transforms.ipynb
+└── lib
+│   ├── data_handling.py
+│   ├── deeplearning.py
+│   ├── data_stats.py
+│   └── plot_utils.py
+└── scripts
+    ├── get_vertex_data_fs.py
+    ├── get_dkt_data_civet.py
+    └── check_vertex_data.py
+```
 Legacy: 
 - ./analysis, ./bin ! R scripts for data parsing, merging, and plotting (see https://github.com/companat/compare-surf-tools for details) 
