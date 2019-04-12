@@ -3,8 +3,8 @@ An extension of BrainHack Project (https://github.com/companat/compare-surf-tool
 
 ## Objectives
 - Compare output of preprocessing pipelines for structural MR imaging 
-  - pipelines: Freesurfer, ANTs, CIVET 
-  - feature comparisons: vertex-wise, ROI-wise (atlas)
+  - pipelines: Freesurfer (v5.1, v5.3, v6.0, ANTs, CIVET2.1)  
+  - feature comparisons: ROI-wise (surface parcellations: DKT40, Destrieux, Glasser)
   - analytic comparisons: classifier performance (individual predictions), statistical inference (biological group differences)  
 - Outlier detection 
   - identify outliers at differen scales 
@@ -22,14 +22,31 @@ Consolidated from the analysis results provided at http://preprocessed-connectom
 * subject_check.csv               : summary table of the data available per subject
 
 New dataset addition(s)
-* aparc_lh_thickness_table.txt : left hemisphere thickness data from FreeSurfer 6.0 analysis
-* aparc_rh_thickness_table.txt : right hemisphere thickness data from FreeSurfer 6.0 analysis
+* Civet: data/ABIDE_civet2.1_thickness.csv (DKT) 
+* FS: data/fs60_group_stats/* (DKT, Destrieux, Glasser) 
 
 
 ## Code
 Current: 
-- ./lib : python functions for data parsing and running statistical analysis 
-- ./notebooks/run_pipeline_comparisons.ipynb : driver notebook for running analysis
+
+* notebooks (driver code for running analysis) 
+    * run_pipeline_comparisons.ipynb 
+    * run_atlas_comparisons.ipynb
+    * import_QC_data.ipynb
+    * generate_plots.ipynb
+    * learn_pipeline_transforms.ipynb
+    
+* lib (helper functions for data parsing and running analysis)
+   * data_handling.py
+   * data_stats.py
+   * plot_utils.py
+   * deeplearning.py
+   
+* scripts (code to extract useful data from pipeline output) 
+    * get_dkt_data_civet.py 
+    * get_vertex_data_fs.py
+    * check_vertex_data.py
+
 
 Legacy: 
 - ./analysis, ./bin ! R scripts for data parsing, merging, and plotting (see https://github.com/companat/compare-surf-tools for details) 
