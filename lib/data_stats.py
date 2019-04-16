@@ -188,3 +188,15 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
         scores_df['p_val_corr'] = p_val_corr_list
 
     return scores_df
+
+def aggregate_perf(df,measure,compare_type,p_thresh=0.05):
+    df_agg = pd.DataFrame(columns=['roi','rank'])
+    df['significance'] = df[measure] < p_thresh
+    roi_list = df['roi'].unique()
+    rank_list = []
+    for roi in roi_list:
+        rank_list.append(np.sum(df[df['roi']==roi]['significance'].values))
+    df_agg['roi'] = roi_list
+    df_agg['rank'] = rank_list
+    
+    return df_agg

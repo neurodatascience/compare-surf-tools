@@ -44,7 +44,7 @@ def get_pysurfer_label_format(labels, aparc, betas=None):
     return labels_std_L, labels_std_R, betas_L, betas_R
 
 
-def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=[]):
+def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=[],colormap='icefire',colorbar_center=0):
     """
     Creates a pysurfer brain, overlays surface parcellation, and colormaps given ROIs 
     Used for plotting signficant ROIs
@@ -84,7 +84,13 @@ def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,
         unique, counts = np.unique(vtx_data, return_counts=True)
         print('atlas: {}, signficant roi count: {}'.format(aparc, dict(zip(unique, counts))))
 
-        brain.add_data(vtx_data,colormap="icefire", alpha=.8, colorbar=True, center=0)
+        if colorbar_center == 'mean':
+            center = np.mean(np.mean(signifcance_color))
+            colormap = colormap
+        else:
+            center = 0
+
+        brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True, center=center)
     
 
     if not os.path.exists(save_dir):
