@@ -5,9 +5,8 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import RepeatedStratifiedKFold
-from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import cross_val_score, permutation_test_score
+from sklearn.model_selection import RepeatedStratifiedKFold, StratifiedKFold, ShuffleSplit
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import statsmodels.stats.multitest as smm
@@ -40,8 +39,9 @@ def cross_correlations(df1,df2,subject_ID_col):
     return xcorr_df
 
 # Significance of correlation between ROIs (within a given pipeline)
-
 def calculate_pvalues(df):
+    """ computes p values of correlation between ROIs in a dataframe format (sub x roi) 
+    """
     df = df.dropna()._get_numeric_data()
     dfcols = pd.DataFrame(columns=df.columns)
     pvalues = dfcols.transpose().join(dfcols, how='outer')
@@ -58,14 +58,17 @@ def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,out
     pipelines = df['pipeline'].unique()
     print('Running ML classifer on {} pipelines'.format(len(pipelines)))
     scores_concat_df = pd.DataFrame()
+    perf_pval_dict = {}
     for pipe in pipelines:
         ml_df = df[df['pipeline']==pipe]
         print('Pipeline {}'.format(pipe))
-        scores_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits,n_repeats)    
+        scores_df, null_df, pvalue = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits,n_repeats)    
         scores_df['pipeline'] = np.tile(pipe,len(scores_df))
-        scores_concat_df = scores_concat_df.append(scores_df)
+        null_df['pipeline'] = np.tile('null',len(null_df))
+        scores_concat_df = scores_concat_df.append(scores_df).append(null_df)
+        perf_pval_dict[pipe] = pvalue
 
-    return scores_concat_df
+    return scores_concat_df, perf_pval_dict
 
 def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10):
     """ Takes a model (classification or regression) instance and computes cross val scores.
@@ -87,7 +90,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
         y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
         print('Data shapes X {}, y {} ({})'.format(X.shape, len(y), list(ml_df[outcome_col].value_counts())))  
         perf_metric = 'roc_auc'
-        cv = cv=RepeatedStratifiedKFold(n_splits=n_splits,n_repeats=n_repeats,random_state=0)
+        cv = RepeatedStratifiedKFold(n_splits=n_splits,n_repeats=n_repeats,random_state=0)
     elif model_type.lower() == 'regression':
         y = ml_df[outcome_col].values
         print('Data shapes X {}, y {} ({:3.2f}m, {:3.2f}sd)'.format(X.shape, len(y), np.mean(y),np.std(y)))   
@@ -102,7 +105,13 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
     scores_df[perf_metric] = perf
     print(' Perf mean:{:4.3f}, sd:{:4.3f}'.format(np.mean(perf),np.std(perf)))
 
-    return scores_df    
+    # Null model 
+    null_cv = ShuffleSplit(n_splits=n_repeats, random_state=0) #10x10xn_permutations are too many. 
+    score, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=100, n_jobs=2)
+    null_df = pd.DataFrame()
+    null_df[perf_metric] = permutation_scores
+
+    return scores_df, null_df, pvalue
 
 # Stat model perfs
 
@@ -190,6 +199,9 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
     return scores_df
 
 def aggregate_perf(df,measure,compare_type,p_thresh=0.05):
+    """ Aggregates performance from different pipeline variations (tools, atlases)
+        Currently aggregates using simple ranking 
+    """
     df_agg = pd.DataFrame(columns=['roi','rank'])
     df['significance'] = df[measure] < p_thresh
     roi_list = df['roi'].unique()
