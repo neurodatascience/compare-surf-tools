@@ -44,7 +44,7 @@ def get_pysurfer_label_format(labels, aparc, betas=None):
     return labels_std_L, labels_std_R, betas_L, betas_R
 
 
-def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=[],colormap='icefire',colorbar_center=0):
+def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=[],plot_style={}):
     """
     Creates a pysurfer brain, overlays surface parcellation, and colormaps given ROIs 
     Used for plotting signficant ROIs
@@ -84,13 +84,26 @@ def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,
         unique, counts = np.unique(vtx_data, return_counts=True)
         print('atlas: {}, signficant roi count: {}'.format(aparc, dict(zip(unique, counts))))
 
-        if colorbar_center == 'mean':
-            center = np.mean(np.mean(signifcance_color))
-            colormap = colormap
+        #plot style and aesthetic
+        if 'colormap' in plot_style.keys():
+            colormap = plot_style['colormap']
         else:
-            center = 0
+            colormap = 'icefire'
 
-        brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True, center=center)
+        if 'center' in plot_style.keys():
+            c_center = plot_style['center']
+            brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True, center=c_center)
+        elif 'range' in plot_style.keys():
+            c_min = plot_style['range'][0]
+            c_max = plot_style['range'][1]
+            brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True, min=c_min,max=c_max)
+        else:
+            brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True)
+
+
+        
+
+        
     
 
     if not os.path.exists(save_dir):
