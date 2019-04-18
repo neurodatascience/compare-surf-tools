@@ -119,7 +119,7 @@ def getCorrectedPValues(pval_raw,alpha=0.05,method='fdr_i'):
     rej, pval_corr = smm.multipletests(pval_raw, alpha=alpha, method=method)[:2]
     return pval_corr
 
-def computePipelineStatsModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,stat_model):
+def computePipelineStatsModels(df,roi_cols,covar_cols,outcome_col,signific_col,stat_model):
     """ Compares performance of different pipeline outputs for a given ML Model
         Calls getStatModelPerf to get individual model performances
     """
@@ -131,22 +131,28 @@ def computePipelineStatsModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,
     for pipe in pipelines:
         sm_df = df[df['pipeline']==pipe]
         print('Pipeline {}'.format(pipe))
-        scores_df = getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,stat_model)
+        scores_df = getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model)
         scores_df['pipeline'] = np.tile(pipe,len(scores_df))
         scores_concat_df = scores_concat_df.append(scores_df)
         print('Top 10 significant regions:\n {}'.format(scores_df.sort_values(by=['p_val']).head(10)))
 
     return scores_concat_df
 
-def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,stat_model):
+def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model):
     """ Creates either a OLS or Logit instance and computes t_vals, p_vals, model fit etc. 
         Does not support other models at the moment since you cannot pass an instance 
         of a stats_models without providing X and Y. 
     """
-
-    model_name_check = True
-    if not stat_model.lower() in ['logit','ols']:
-        print('Unknown stats model')
+    
+    outcome_col_val = outcome_col[0]
+    outcome_col_type = outcome_col[1]
+    model_name_check = False
+    if (stat_model.lower() == 'logit') and (outcome_col_type=='cat'):
+        model_name_check = True
+    elif (stat_model.lower() == 'ols') and (outcome_col_type=='continuous'):
+        model_name_check = True
+    else:
+        print('Outcome var type {} and stats model {} mismatch'.format(outcome_col_type,stat_model))
         model_name_check = False
 
     if model_name_check:
@@ -155,20 +161,42 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
         t_val_list = []
         p_val_list = []
       
-        covar_string = ''
-        if len(covar_continuous_cols) > 0:
-            for covar in covar_continuous_cols:
-                covar_string = covar_string + ' + {}'.format(covar)
+        signific_col_val = signific_col[0]
+        signific_col_type = signific_col[1]
 
-        if len(covar_cat_cols) > 0:
-            for covar in covar_cat_cols:
-                covar_string = covar_string + ' + C({})'.format(covar)
+        covar_val_list = []
+        covar_string = ''
+        if len(covar_cols) > 0:
+            for covar in covar_cols:
+                covar_val = covar[0]
+                covar_type = covar[1]
+                covar_val_list.append(covar_val)
+                if covar_type == 'cat':
+                    covar_string = covar_string + ' + C({})'.format(covar_val)
+                elif covar_type == 'continuous':
+                    covar_string = covar_string + ' + {}'.format(covar_val)
+                else:
+                    print('unknown covar type {}'.format(covar))
 
         for roi in roi_cols:
-            input_cols = [outcome_col, roi] + covar_continuous_cols + covar_cat_cols
-            X = sm_df[input_cols]
-            formula_string = '{} ~ {}{}'.format(outcome_col,roi,covar_string)
-
+            if outcome_col_val != 'roi': #using roi as predictor (independent var)
+                signific_col_val = roi
+                input_cols = [outcome_col_val, roi] + covar_val_list
+                X = sm_df[input_cols]
+                formula_string = '{} ~ {}{}'.format(outcome_col_val,roi,covar_string)
+                stat_summary_name = signific_col_val
+            else: # using roi as outcome (dependent var)
+                input_cols = [roi, signific_col_val] + covar_val_list
+                X = sm_df[input_cols]
+                if signific_col_type == 'continuous':
+                    formula_string = '{} ~ {}{}'.format(roi,signific_col_val,covar_string)
+                    stat_summary_name = signific_col_val
+                elif signific_col_type == 'cat':
+                    formula_string = '{} ~ C({}){}'.format(roi,signific_col_val,covar_string)
+                    stat_summary_name = 'C({})[T.1]'.format(signific_col_val)
+                else:
+                    print('unknown signficance independent variable type: {}'.format(signific_col))
+           
             if stat_model.lower() == 'logit':
                 model = smf.logit(formula=formula_string,data=X)
 
@@ -179,9 +207,10 @@ def getStatModelPerf(sm_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome
                 print('Unknown stats model {}'.format(stat_model))
 
             results = model.fit(disp=0) #default newton fails for smaller N (even smaller site N)
-            coef = results.params[roi] # just for ROI
-            t_val = results.tvalues[roi] # just for ROI
-            p_val = results.pvalues[roi] # just for ROI
+            
+            coef = results.params[stat_summary_name] # just for ROI
+            t_val = results.tvalues[stat_summary_name] # just for ROI
+            p_val = results.pvalues[stat_summary_name] # just for ROI
             coef_list.append(coef)
             t_val_list.append(t_val)
             p_val_list.append(p_val)
