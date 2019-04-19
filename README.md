@@ -51,3 +51,23 @@ Current:
 ```
 Legacy: 
 - see https://github.com/companat/compare-surf-tools for details
+
+## Steps (see ./compute_workflow.png) 
+Prereq: Processed output from a given pipeline (tool): e.g. FreeSurfer
+
+A. Data parsing
+
+1. run get_vertex_data_fs.py for each subject (ideally in a loop) to create summary CSV for all processed subjects. 
+```
+python get_vertex_data_fs.py -p $sub/surf -s '.fwhm20.fsaverage.mgh' -o ./fs_fsaverage_vout
+```
+
+2. run detect_vertex_outlier.py (TODO) to identify outliers (subjects) from vertex-wise data
+
+3. run following freesurfer command to get ROI wise summay CSV (run separately for left and right hemispheres) 
+```
+aparcstats2table --hemi rh --subjectsfile=fs_subject_list --skip  --meas thickness   --parc aparc.a2009s   --tablefile rh.aparc.a2009.thickness.table.test1
+```
+B. Data standardization 
+
+C. Comparative analysis
