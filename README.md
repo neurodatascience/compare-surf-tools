@@ -50,4 +50,4 @@ Current:
     └── check_vertex_data.py
 ```
 Legacy: 
-- ./analysis, ./bin ! R scripts for data parsing, merging, and plotting (see https://github.com/companat/compare-surf-tools for details) 
+- see https://github.com/companat/compare-surf-tools for details
