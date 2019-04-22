@@ -57,15 +57,16 @@ Prereq: Processed output from a given pipeline (tool): e.g. FreeSurfer
 
 A. Data parsing
 
-1. run scripts/get_vertex_data_fs.py for each subject (ideally in a loop) to create summary CSV for all processed subjects. 
+1. run scripts/get_vertex_data_fs.py on a FS subject dir to get vertext-wise summay CSV for all subjects.
 ```
-python get_vertex_data_fs.py -p $sub/surf -s '.fwhm20.fsaverage.mgh' -o ./fs_fsaverage_vout
+python get_vertex_data_fs.py -s ../data/subjects/ -k '.fwhm20.fsaverage.mgh' -o ../data/sample_output/fs_fsaverage_vout
 ```
 
-2. run scripts/get_roi_data_fs.py on a FS subject dir to get ROI wise summay CSV for all subjects. Uses aparcstats2table command. 
+2. run scripts/get_roi_data_fs.py on a FS subject dir to get ROI-wise summay CSV for all subjects. Uses aparcstats2table command. 
 ```
 python get_roi_data_fs.py -s ../data/subjects -l ../data/subject_list.txt -m thickness -p a2009s -o ../data/sample_output/
 ```
+
 B. Data standardization 
 
 C. Comparative analysis
