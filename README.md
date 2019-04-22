@@ -57,17 +57,17 @@ Prereq: Processed output from a given pipeline (tool): e.g. FreeSurfer
 
 A. Data parsing
 
-1. run get_vertex_data_fs.py for each subject (ideally in a loop) to create summary CSV for all processed subjects. 
+1. run scripts/get_vertex_data_fs.py for each subject (ideally in a loop) to create summary CSV for all processed subjects. 
 ```
 python get_vertex_data_fs.py -p $sub/surf -s '.fwhm20.fsaverage.mgh' -o ./fs_fsaverage_vout
 ```
 
-2. run detect_vertex_outlier.py (TODO) to identify outliers (subjects) from vertex-wise data
-
-3. run following freesurfer command to get ROI wise summay CSV (run separately for left and right hemispheres) 
+2. run scripts/get_roi_data_fs.py on a FS subject dir to get ROI wise summay CSV for all subjects. Uses aparcstats2table command. 
 ```
-aparcstats2table --hemi rh --subjectsfile=fs_subject_list --skip  --meas thickness   --parc aparc.a2009s   --tablefile rh.aparc.a2009.thickness.table.test1
+python get_roi_data_fs.py -s ../data/subjects -l ../data/subject_list.txt -m thickness -p a2009s -o ../data/sample_output/
 ```
 B. Data standardization 
 
 C. Comparative analysis
+
+D. Outlier detection
