@@ -9,14 +9,14 @@ import sys
 
 # input parser
 parser = argparse.ArgumentParser(description='Process ROI-wise output from FS using aparcstats2table')
-parser.add_argument('-s','--subjectdir',help='path for the file with subject list from freesurfer output')
+parser.add_argument('-s','--subjectsdir',help='path for subjects dir from freesurfer output')
 parser.add_argument('-l','--listofsubjects',help='path for the file with subject list from freesurfer output')
 parser.add_argument('-m','--meas',help='phenotypic measure (e.g. thickness, surface area etc.')
 parser.add_argument('-p','--parc',help='cortical surface parcellation (e.g. a2009s,Glasseratlas')
 parser.add_argument('-o','--output',help='path for the left and right output CSVs for ROI-wise cortical thickness from freesurfer output')
 
 args = parser.parse_args()
-subject_dir = args.subjectdir
+subjects_dir = args.subjectsdir
 subjectfile = args.listofsubjects
 measure = args.meas
 parc = args.parc
@@ -30,7 +30,7 @@ cmd_l = 'aparcstats2table --hemi lh --subjectsfile {} --skip --meas {} --parc ap
 cmd_r = 'aparcstats2table --hemi rh --subjectsfile {} --skip --meas {} --parc aparc.{} --tablefile {}'.format(subjectfile,measure,parc,file_r)
 
 # env var required by freesurfer
-os.environ['SUBJECTS_DIR'] = subject_dir 
+os.environ['SUBJECTS_DIR'] = subjects_dir 
 
 print('\ngenerating table for left hemisphere')
 os.system(cmd_l)
