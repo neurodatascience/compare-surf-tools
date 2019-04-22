@@ -26,13 +26,13 @@ parc = args.parc
 file_l = args.output + parc + '_' + measure + '_lh.csv'
 file_r = args.output + parc + '_' + measure + '_rh.csv'
 
-cmd_l = 'aparcstats2table --hemi lh --subjectsfile {} --skip --meas {} --parc aparc.{}atlas --tablefile {}'.format(subjectfile,measure,parc,file_l)
-cmd_r = 'aparcstats2table --hemi rh --subjectsfile {} --skip --meas {} --parc aparc.{}atlas --tablefile {}'.format(subjectfile,measure,parc,file_r)
+cmd_l = 'aparcstats2table --hemi lh --subjectsfile {} --skip --meas {} --parc aparc.{} --tablefile {}'.format(subjectfile,measure,parc,file_l)
+cmd_r = 'aparcstats2table --hemi rh --subjectsfile {} --skip --meas {} --parc aparc.{} --tablefile {}'.format(subjectfile,measure,parc,file_r)
 
 os.environ['SUBJECTS_DIR'] = subject_dir 
-os.system('module load freesurfer')
+
 print('generating table for left hemisphere')
 os.system(cmd_l)
-print('generating table for right hemisphere')
+print('\ngenerating table for right hemisphere')
 os.system(cmd_r)
 
