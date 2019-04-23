@@ -8,12 +8,10 @@ import os
 import sys
 
 # input parser
-parser = argparse.ArgumentParser(description='Map custom parcellations (e.g. Glasser) on FS surfaces using mri_surf2surf')
+parser = argparse.ArgumentParser(description='Map custom parcellations (e.g. Glasser) on FS surfaces using mri_surf2surf and compute ROI stats (per subject) using mris_anatomical_stats')
 parser.add_argument('-s','--subjectsdir',help='path for subjects dir from freesurfer output')
 parser.add_argument('-p','--parcpath',help='path to the dir for left and right custom cortical surface parcellations')
 parser.add_argument('-n','--name',help='name to the custom cortical surface parcellation (e.g. Glasser)')
-
-#parser.add_argument('-o','--output',help='path for the left and right output CSVs for ROI-wise cortical thickness from freesurfer output')
 
 args = parser.parse_args()
 
@@ -36,9 +34,6 @@ tval_annot_rh = 'rh.{}.annot'.format(parc_name)
 
 tval_stats_lh = 'lh.{}.stats'.format(parc_name)
 tval_stats_rh = 'rh.{}.stats'.format(parc_name)
-# freesurfer commands
-# '--sval-annot path/to/glasser/parcellation/lh.HCP-MMP1.annot'
-# '--tval $SUBJECTS_DIR/$sub/label/lh.glasser.annot'
 
 # env var required by freesurfer
 os.environ['SUBJECTS_DIR'] = subjects_dir 
@@ -59,6 +54,7 @@ else:
         stats_dir = '{}{}/stats/'.format(subjects_dir,subject)
 
         #------------ Map annotation from fsaverage space to the subject space (native) surfaces --------------#
+        # mri_surf2surf --srcsubject fsaverage --trgsubject $s --hemi lh --sval-annot ../glasser/parcellation/lh.HCP-MMP1.annot --tval $SUBJECTS_DIR/${s}/label/lh.glasser.annot
         cmd_l = 'mri_surf2surf --srcsubject fsaverage --trgsubject {} --hemi lh --sval-annot {} --tval {}{}'.format(subject, sval_annot_lh, label_dir, tval_annot_lh)
         cmd_r = 'mri_surf2surf --srcsubject fsaverage --trgsubject {} --hemi rh --sval-annot {} --tval {}{}'.format(subject, sval_annot_rh, label_dir, tval_annot_rh)
         
