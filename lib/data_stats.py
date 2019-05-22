@@ -107,7 +107,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
 
     # Null model 
     null_cv = ShuffleSplit(n_splits=n_repeats, random_state=0) #10x10xn_permutations are too many. 
-    score, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=100, n_jobs=2)
+    score, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=10, n_jobs=2)
     null_df = pd.DataFrame()
     null_df[perf_metric] = permutation_scores
 
