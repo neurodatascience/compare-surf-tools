@@ -31,8 +31,8 @@ subject_subdirs = os.listdir(subjects_dir)
 n_subjects = len(subject_subdirs)
 print('number of subjects found {}'.format(n_subjects))
 
-for subject_dir in subject_subdirs: 
-    surf_dir = subjects_dir + subject_dir + '/surf'
+for subject_subdir in subject_subdirs: 
+    surf_dir = subjects_dir + subject_subdir + '/surf'
     suffix = args.kernel
     l_surf_file = surf_dir + '/lh.thickness' + suffix
     r_surf_file = surf_dir + '/rh.thickness' + suffix
@@ -55,6 +55,6 @@ for subject_dir in subject_subdirs:
         write_csv([subj_ID] + r_surf, r_out_file)
 
     except:
-        print('Unable to read thickness files')
+        print('Unable to read thickness files from subject dir: {}'.format(subject_subdir))
 
 print('vertex-wise CSVs saved to {}_[lh,rh].csv'.format(args.output))

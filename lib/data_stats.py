@@ -11,6 +11,9 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import statsmodels.stats.multitest as smm
 from scipy.stats import pearsonr
+import scipy.cluster.hierarchy as sch
+import collections
+from sklearn.metrics.pairwise import pairwise_distances
 
 # Simple correlations of features
 def cross_correlations(df1,df2,subject_ID_col):
@@ -50,6 +53,25 @@ def calculate_pvalues(df):
             pvalues[r][c] = round(pearsonr(df[r], df[c])[1], 4)
     return pvalues
 
+# cluster memberships
+def get_cluster_membership(_df,g,n_clusters):
+    member_df = _df[['SubjID']].copy()
+    Z = g.dendrogram_row.linkage
+    T = sch.fcluster(Z, n_clusters, 'maxclust')
+    member_count = collections.Counter(T)
+    pipe = _df['pipeline'].values[0]
+    print('Pipeline {}, cluster sizes {}'.format(pipe, member_count))
+    member_df['membership_{}'.format(pipe)] = T
+    return member_df
+
+def generate_pairwise_membership(df,m_col):
+    membership = df[m_col].values
+    # Just want to know if two subjects are in the same cluster (hamming will compute the inverse)
+    pairwise_membership = 1-pairwise_distances(np.array(membership).reshape(-1,1),metric='hamming')
+    df_membership = pd.DataFrame(columns=df['SubjID'], index=df['SubjID'],data=pairwise_membership)
+    return df_membership
+
+    
 # ML model perfs
 def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10):
     """ Compares performance of different pipeline outputs for a given ML Model
@@ -107,7 +129,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
 
     # Null model 
     null_cv = ShuffleSplit(n_splits=n_repeats, random_state=0) #10x10xn_permutations are too many. 
-    score, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=100, n_jobs=2)
+    score, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=10, n_jobs=2)
     null_df = pd.DataFrame()
     null_df[perf_metric] = permutation_scores
 
