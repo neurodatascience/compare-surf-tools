@@ -6,6 +6,35 @@
 import numpy as np
 import pandas as pd
 
+def filter_data(data_df, subject_ID_col, qc_df, qc_criterion, external_criterion):
+    """ Returns a subset of dataframe based on manual or automatic QC/outlier detection. 
+    Also removes subjects based on external criteria such as minimum subjects per site. 
+    """
+    qc_type = qc_criterion[0] 
+    qc_ind = qc_criterion[1] 
+    print('Filtering based on {}. Number subjects before filtering {})'.format(qc_type,len(data_df[subject_ID_col].unique())))
+
+    keep_subs = qc_df[qc_df[qc_type].isin(qc_ind)][subject_ID_col].unique()
+    filtered_df = data_df[pd.to_numeric(data_df[subject_ID_col]).isin(keep_subs)]
+    filtered_subs = filtered_df[subject_ID_col].unique()
+    print('Resultant number of subjects {}'.format(len(filtered_subs)))
+            
+    # Check for minimum sample size requirement for covariates, especially SITE_ID
+    if external_criterion != None:
+        print('Filtering based on external crierion')
+        for covar in external_criterion.keys():
+            min_sample_req = external_criterion[covar] 
+            min_count = min_sample_req*len(filtered_df['pipeline'].unique()) 
+            print('\nPerforming min sample (N_min={}) per workflow size check based on {}'.format(min_sample_req,covar))
+
+            counts = filtered_df[covar].value_counts()
+            filtered_df = filtered_df[filtered_df[covar].isin(counts[counts > min_count].index)]
+            print("Dropping subjects for all workflows for {} {}".format(covar,counts[counts <= min_count]))
+            filtered_subs = filtered_df[subject_ID_col].unique()
+            print('Resultant number of subjects {}'.format(len(filtered_subs)))
+            
+    return filtered_df
+
 def combine_processed_data(data_dict, subject_ID_col, na_action):
     """ Reads CSV outputs from the processed MR images by pipelines such as FreeSurfer, ANTs, CIVET, etc.
     """ 
