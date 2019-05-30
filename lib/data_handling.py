@@ -12,7 +12,7 @@ def filter_data(data_df, subject_ID_col, qc_df, qc_criterion, external_criterion
     """
     qc_type = qc_criterion[0] 
     qc_ind = qc_criterion[1] 
-    print('Filtering based on {}. Number subjects before filtering {})'.format(qc_type,len(data_df[subject_ID_col].unique())))
+    print('\nFiltering based on {}. Number subjects before filtering {}'.format(qc_type,len(data_df[subject_ID_col].unique())))
 
     keep_subs = qc_df[qc_df[qc_type].isin(qc_ind)][subject_ID_col].unique()
     filtered_df = data_df[pd.to_numeric(data_df[subject_ID_col]).isin(keep_subs)]
@@ -24,12 +24,11 @@ def filter_data(data_df, subject_ID_col, qc_df, qc_criterion, external_criterion
         print('Filtering based on external crierion')
         for covar in external_criterion.keys():
             min_sample_req = external_criterion[covar] 
-            min_count = min_sample_req*len(filtered_df['pipeline'].unique()) 
-            print('\nPerforming min sample (N_min={}) per workflow size check based on {}'.format(min_sample_req,covar))
+            print('Performing min sample (N_min={}) per workflow size check based on {}'.format(min_sample_req,covar))
 
             counts = filtered_df[covar].value_counts()
-            filtered_df = filtered_df[filtered_df[covar].isin(counts[counts > min_count].index)]
-            print("Dropping subjects for all workflows for {} {}".format(covar,counts[counts <= min_count]))
+            filtered_df = filtered_df[filtered_df[covar].isin(counts[counts > min_sample_req].index)]
+            print("Dropping subjects for all workflows for {} {}".format(covar,counts[counts <= min_sample_req]))
             filtered_subs = filtered_df[subject_ID_col].unique()
             print('Resultant number of subjects {}'.format(len(filtered_subs)))
             
