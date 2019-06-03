@@ -40,7 +40,8 @@ for i in range(n_iter):
     print('rows {}:{}'.format(skip_rows,skip_rows+len(data)))
     if data.isnull().values.any():
         missing_values = True
-        print('Missing values in one of the rows between {}:{}'.format(skip_rows, skip_rows+batch_size))
+        subs_with_missing_values = data.isnull.any(axis=1).iloc[:,0].values
+        print('Missing values for subjects {}'.format(subs_with_missing_values))
     else:
         df['SubjID'] = data.iloc[:,0]
         df['mean_thickness'] = data.iloc[:,1:].mean(axis=1)
