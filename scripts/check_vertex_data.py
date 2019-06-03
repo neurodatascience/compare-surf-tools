@@ -24,7 +24,7 @@ n_iter = subx//batch_size
 if subx%batch_size !=0:
     n_iter += 1
 
-skip_rows = 0
+skip_rows = 1 #header
 missing_values = False
 
 print('Splitting {} subjects into batches of {} giving {} iterations'.format(subx,batch_size,n_iter))  
@@ -37,11 +37,11 @@ for i in range(n_iter):
     else: 
         data = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
      
-    print('rows {}:{}'.format(skip_rows,skip_rows+len(data)))
+    print('rows {}:{}'.format(skip_rows,skip_rows+len(data)))   
     if data.isnull().values.any():
         missing_values = True
-        subs_with_missing_values = data.isnull.any(axis=1).iloc[:,0].values
-        print('Missing values for subjects {}'.format(subs_with_missing_values))
+        print('missing values in this batch')
+
     else:
         df['SubjID'] = data.iloc[:,0]
         df['mean_thickness'] = data.iloc[:,1:].mean(axis=1)
