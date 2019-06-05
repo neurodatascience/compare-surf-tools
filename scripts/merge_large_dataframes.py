@@ -41,8 +41,9 @@ n_iter = subx//batch_size
 if subx%batch_size !=0:
     n_iter += 1
 
-skip_rows = 0
 
+skip_rows = 0
+demoMerged_csv = out_csv + 'demoMerged'
 print('Splitting {} subjects into batches of {} giving {} iterations'.format(subx,batch_size,n_iter))  
 for i in range(n_iter):
     if i == n_iter - 1:
@@ -50,12 +51,11 @@ for i in range(n_iter):
     else: 
         data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
     
-    print('Reading rows {}:{}'.format(skip_rows,skip_rows+len(data_df)))
+    print('Reading rows {}:{}'.format(skip_rows,skip_rows+batch_size))
     mr_cols = list(range(data_df.shape[1]-1))
     data_df.columns = [Subject_id_col] + mr_cols
     data_df = pd.merge(data_df,demo_df,on=Subject_id_col,how='left')
-    
-    demoMerged_csv = out_csv + 'demoMerged'
+
     with open(demoMerged_csv, 'a') as f:
         if i==0:
             data_df.to_csv(f, header=True)
@@ -86,26 +86,32 @@ if drop_condition is not None:
     print("Number of non-zero columns across all subjects: {}".format(len(non_zero_cols)))
 
     # One you have the list of nonzero columns you can re-read the csv by rows
+    nonzero_csv = out_csv + '_nonzero.csv'
     print('Writing csv with dropped columns')
     skip_rows = 0
+    print('n_iter {}'.format(n_iter))
     for i in range(n_iter):
+        print('rows {}:{}'.format(skip_rows,skip_rows+batch_size))
         if i == 0:
-            data_df = pd.read_csv(demoMerged_csv, skiprows = skip_rows, nrows = batch_size, usecols=non_zero_cols)
+            data_df = pd.read_csv(demoMerged_csv, nrows = batch_size)
+            all_cols = data_df.columns
         elif i == n_iter - 1:
-            data_df = pd.read_csv(demoMerged_csv, header=None, skiprows = skip_rows, usecols=non_zero_cols)
-            print('df shape after dropping zeros {}'.format(data_df.shape))
+            print('i am here 0')
+            data_df = pd.read_csv(demoMerged_csv, header=None,  skiprows = skip_rows+1)
         else: 
-            data_df = pd.read_csv(demoMerged_csv, header=None, skiprows = skip_rows, nrows = batch_size, usecols=non_zero_cols)
+            data_df = pd.read_csv(demoMerged_csv, header=None,  skiprows = skip_rows+1, nrows=batch_size)
         
-        print('rows {}:{}'.format(skip_rows,skip_rows+len(data_df)))
+        data_df.columns = all_cols
+        data_df = data_df[non_zero_cols]
+        print('df shape after dropping zeros {}'.format(data_df.shape))
         
-        nonzero_csv = out_csv + '_nonzero.csv'
+        
         with open(nonzero_csv, 'a') as f:
             if i==0:
                 data_df.to_csv(f, header=True)
             else:
                 data_df.to_csv(f, header=False)
-        
+    
         del data_df
         skip_rows += batch_size
 
