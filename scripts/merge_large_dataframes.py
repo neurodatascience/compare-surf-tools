@@ -11,9 +11,9 @@ import argparse
 parser = argparse.ArgumentParser(description='Merge demographic info onto high-dim image feature csv')
 parser.add_argument('-i','--ImageFeaturePath',help='path for the imaging feature file (high-dim)')
 parser.add_argument('-d','--DemographicInfoPath',help='path for the demographic file')
-parser.add_argument('-f','--feature',nargs='+', help='feature column from the demographic file')
+parser.add_argument('-f','--feature',nargs='+', help='feature column from the demographic file',type=str)
 
-parser.add_argument('-r','--removeCols',help='drop columns with this condition')
+parser.add_argument('-r','--removeCols',help='drop columns with this condition - needs to be a number')
 parser.add_argument('-n','--NumberOfSubjects', type=int, help='NumberOfSubjects in the combined CSV')
 parser.add_argument('-b','--batch', type=int, help='batch size')
 parser.add_argument('-o','--output',help='output csv for average thickness')
@@ -23,7 +23,8 @@ args = parser.parse_args()
 vertex_file = args.ImageFeaturePath
 demo_file = args.DemographicInfoPath
 feat_col = args.feature
-drop_condition = args.removeCols
+print('feature colums {}'.format(feat_col))
+drop_condition = int(args.removeCols)
 subx = args.NumberOfSubjects
 batch_size = args.batch
 out_csv = args.output
@@ -31,7 +32,7 @@ out_csv = args.output
 # Read demographics
 Subject_id_col = 'SUB_ID'
 demo_df_long = pd.read_csv(demo_file)
-demo_df = demo_df_long[[Subject_id_col,feat_col]]
+demo_df = demo_df_long[[Subject_id_col]+feat_col]
 
 print('Shape of demo_df {}'.format(demo_df.shape))
 
