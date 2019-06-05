@@ -11,7 +11,8 @@ import argparse
 parser = argparse.ArgumentParser(description='Merge demographic info onto high-dim image feature csv')
 parser.add_argument('-i','--ImageFeaturePath',help='path for the imaging feature file (high-dim)')
 parser.add_argument('-d','--DemographicInfoPath',help='path for the demographic file')
-parser.add_argument('-f','--feature',help='feature column from the demographic file')
+parser.add_argument('-f','--feature',nargs='+', help='feature column from the demographic file')
+
 parser.add_argument('-d','--dropCols',help='drop columns with this condition')
 parser.add_argument('-n','--NumberOfSubjects', type=int, help='NumberOfSubjects in the combined CSV')
 parser.add_argument('-b','--batch', type=int, help='batch size')
@@ -48,7 +49,7 @@ for i in range(n_iter):
     else: 
         data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
     
-    if drop_condition not None:
+    if drop_condition is not None:
         print('Dropping columns with all 0s')
         data_df = data_df.loc[:, (data_df != drop_condition).any(axis=0)]
 
