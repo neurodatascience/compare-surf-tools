@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(description='Merge demographic info onto high-d
 parser.add_argument('-i','--ImageFeaturePath',help='path for the imaging feature file (high-dim)')
 parser.add_argument('-d','--DemographicInfoPath',help='path for the demographic file')
 parser.add_argument('-f','--feature',help='feature column from the demographic file')
+parser.add_argument('-d','--dropCols',help='drop columns with this condition')
 parser.add_argument('-n','--NumberOfSubjects', type=int, help='NumberOfSubjects in the combined CSV')
 parser.add_argument('-b','--batch', type=int, help='batch size')
 parser.add_argument('-o','--output',help='output csv for average thickness')
@@ -21,6 +22,7 @@ args = parser.parse_args()
 vertex_file = args.ImageFeaturePath
 demo_file = args.DemographicInfoPath
 feat_col = args.feature
+drop_condition = args.dropCols
 subx = args.NumberOfSubjects
 batch_size = args.batch
 out_csv = args.output
@@ -45,11 +47,15 @@ for i in range(n_iter):
         data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows)
     else: 
         data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
-     
+    
+    if drop_condition not None:
+        print('Dropping columns with all 0s')
+        data_df = data_df.loc[:, (data_df != drop_condition).any(axis=0)]
+
     print('rows {}:{}'.format(skip_rows,skip_rows+len(data_df)))
     data_df.columns = [Subject_id_col] + list(range(data_df.shape[1]-1))
     data_df = pd.merge(data_df,demo_df,on=Subject_id_col,how='left')
-
+    
     with open(out_csv, 'a') as f:
         if i==0:
             data_df.to_csv(f, header=True)
