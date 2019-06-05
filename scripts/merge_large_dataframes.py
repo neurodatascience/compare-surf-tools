@@ -13,7 +13,7 @@ parser.add_argument('-i','--ImageFeaturePath',help='path for the imaging feature
 parser.add_argument('-d','--DemographicInfoPath',help='path for the demographic file')
 parser.add_argument('-f','--feature',nargs='+', help='feature column from the demographic file')
 
-parser.add_argument('-d','--dropCols',help='drop columns with this condition')
+parser.add_argument('-r','--removeCols',help='drop columns with this condition')
 parser.add_argument('-n','--NumberOfSubjects', type=int, help='NumberOfSubjects in the combined CSV')
 parser.add_argument('-b','--batch', type=int, help='batch size')
 parser.add_argument('-o','--output',help='output csv for average thickness')
@@ -23,7 +23,7 @@ args = parser.parse_args()
 vertex_file = args.ImageFeaturePath
 demo_file = args.DemographicInfoPath
 feat_col = args.feature
-drop_condition = args.dropCols
+drop_condition = args.removeCols
 subx = args.NumberOfSubjects
 batch_size = args.batch
 out_csv = args.output
