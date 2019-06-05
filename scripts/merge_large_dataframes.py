@@ -80,13 +80,18 @@ if drop_condition is not None:
         data_df = data_df.loc[:, (data_df != drop_condition).any(axis=0)]
         non_zero_cols = non_zero_cols + list(data_df.columns)
     
+        del data_df
+
+    non_zero_cols = [Subject_id_col] + non_zero_cols + feat_col
     print("Number of non-zero columns across all subjects: {}".format(len(non_zero_cols)))
 
     # One you have the list of nonzero columns you can re-read the csv by rows
     print('Writing csv with dropped columns')
     skip_rows = 0
     for i in range(n_iter):
-        if i == n_iter - 1:
+        if i == 0:
+            data_df = pd.read_csv(demoMerged_csv, skiprows = skip_rows, nrows = batch_size, usecols=non_zero_cols)
+        elif i == n_iter - 1:
             data_df = pd.read_csv(demoMerged_csv, header=None, skiprows = skip_rows, usecols=non_zero_cols)
             print('df shape after dropping zeros {}'.format(data_df.shape))
         else: 
