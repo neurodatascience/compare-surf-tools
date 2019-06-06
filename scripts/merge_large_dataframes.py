@@ -71,19 +71,30 @@ if drop_condition is not None:
     # Need to read all rows and few columns to make sure every subject has 0s in that column (vertex)
 
     col_size = 10000
+    n_col = len(mr_cols)
+    
+    n_iter_col = n_col//col_size
+    if n_col%col_size !=0:
+        n_iter_col += 1
+
     non_zero_cols = []
-    for start_idx in range(0,len(mr_cols),col_size):
-        end_idx = start_idx + col_size
-        print('Reading columns {}:{}'.format(start_idx,end_idx))
-        col_subset = mr_cols[start_idx:end_idx]
+    start_col = 0
+    mr_cols = list(map(str, mr_cols)) # Column names are strings, int dtype will use it as a (wrong) col index
+    for i in range(n_iter_col):
+        end_col = start_col + col_size
+        print('Reading columns {}:{}'.format(start_col,end_col))
+        col_subset =  mr_cols[start_col:end_col]
         data_df =pd.read_csv(demoMerged_csv,usecols=col_subset)
         data_df = data_df.loc[:, (data_df != drop_condition).any(axis=0)]
         non_zero_cols = non_zero_cols + list(data_df.columns)
-    
+        start_col += col_size
         del data_df
 
+    print('col subset')
+    print(col_subset[:5])
     non_zero_cols = [Subject_id_col] + non_zero_cols + feat_col
     print("Number of non-zero columns across all subjects: {}".format(len(non_zero_cols)))
+    print(non_zero_cols[:5])
 
     # One you have the list of nonzero columns you can re-read the csv by rows
     nonzero_csv = out_csv + '_nonzero.csv'
@@ -116,4 +127,3 @@ if drop_condition is not None:
         skip_rows += batch_size
 
 print('Saving merged CSV here: {}'.format(nonzero_csv))
-
