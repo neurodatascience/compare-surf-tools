@@ -37,7 +37,8 @@ for i in range(n_iter):
     else: 
         data = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
      
-    print('rows {}:{}'.format(skip_rows,skip_rows+len(data)))   
+    print('rows {}:{}'.format(skip_rows,skip_rows+batch_size))
+    print('shape of data slice {}'.format(data.shape))   
     if data.isnull().values.any():
         missing_values = True
         print('missing values in this batch')
