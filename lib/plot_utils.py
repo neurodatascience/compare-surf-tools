@@ -8,6 +8,7 @@ import numpy as np
 import nibabel as nib
 from surfer import Brain
 from mayavi import mlab
+from scipy.spatial import distance
 
 from PIL import Image
 from PIL import ImageFont
@@ -101,11 +102,6 @@ def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,
             brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True)
 
 
-        
-
-        
-    
-
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -114,7 +110,7 @@ def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,
     print('Image saved at {}'.format(save_path))
 
 
-def createImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4):
+def createImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4,transpose=False):
     """
     Creates montages of all images in a given dir. 
     Assumes all pipeline variations (tool / atlas) have same numbre of images (views).
@@ -138,10 +134,17 @@ def createImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4):
         n_col = len(imagex)//n_row
 
         #creates a new empty image, RGB mode
-        montage_im = Image.new('RGB', (n_col*pane_size,n_row*pane_size),color=(255,255,255,0))
+        #montage_size = (n_row*pane_size,n_col*pane_size)
+        if transpose:
+            montage_size = (n_row*pane_size,n_col*pane_size)
+        else:
+            montage_size = (n_col*pane_size,n_row*pane_size)
+            
+        montage_im = Image.new('RGB', montage_size,color=(255,255,255,0))
 
-        imx = 0
+        print('montage size {}'.format(montage_size))
         
+        imx = 0
         #Iterate through a grid 
         for i in range(0,(n_col)*pane_size, pane_size):
             for j in range(0,(n_row)*pane_size, pane_size):                                   
@@ -157,7 +160,10 @@ def createImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4):
                 im.thumbnail((thumb_size,thumb_size))
 
                 #paste the image at location i,j:
-                montage_im.paste(im, (i,j))
+                if transpose:
+                    montage_im.paste(im, (j,i))
+                else:    
+                    montage_im.paste(im, (i,j))
 
                 imx+=1
 
@@ -166,3 +172,33 @@ def createImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4):
         montage_im = None
         
     return montage_im
+
+
+def get_nbrs(coords,vertex_idx):
+    seeds = coords[vertex_idx]
+    dist_array = distance.cdist(seeds, coords, 'euclidean')
+
+    aug_vertex_idx =[]
+    n_nbrs = 50
+    for s in range(len(seeds)):
+        closest_v = dist_array[s,:].argsort()[:n_nbrs]
+        aug_vertex_idx.append(closest_v)
+
+    return np.hstack((aug_vertex_idx))
+
+def plot_surface_vertices(common_space,morph_data,vertex_idx,aug_data,hemi,surf,view,cmap,save_path):
+    b = Brain(common_space, hemi, surf, background="white",views=view)
+    x, y, z = b.geo[hemi].coords.T
+    coords = np.array([x,y,z]).T
+    print('Number of vertices to be plotted {}'.format(len(vertex_idx)))
+    if aug_data:
+        aug_vertex_idx = get_nbrs(coords,vertex_idx)
+        print('Number of vertices to be plotted after augmentation {}'.format(len(aug_vertex_idx)))
+        morph_data[aug_vertex_idx] = 1 
+    else:
+        morph_data[vertex_idx] = 1 
+    
+    print(np.sum(morph_data))
+    b.add_data(morph_data,colormap=cmap, alpha=.9, colorbar=True)    
+    print(save_path)
+    b.save_image(save_path)
