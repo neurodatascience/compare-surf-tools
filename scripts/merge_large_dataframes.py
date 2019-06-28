@@ -22,7 +22,7 @@ args = parser.parse_args()
 vertex_file = args.ImageFeaturePath
 demo_file = args.DemographicInfoPath
 feat_col = args.feature
-drop_condition = int(args.removeCols)
+drop_condition = args.removeCols
 Subject_id_col = args.NameOfSubjectColumn
 batch_size = args.batch
 out_csv = args.output
@@ -76,7 +76,8 @@ if demo_file is not None:
         skip_rows += batch_size
 
 if drop_condition is not None:
-    print('Dropping columns with all 0s')
+    drop_condition = int(drop_condition)
+    print('Dropping columns with all {}',format(drop_condition))
     # Need to read all rows and few columns to make sure every subject has 0s in that column (vertex)
     
     n_iter_col = n_col//col_size

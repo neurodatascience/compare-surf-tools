@@ -228,6 +228,7 @@ def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_mod
             else:
                 print('Unknown stats model {}'.format(stat_model))
 
+            # Can't do fit_regularized for mass-univariate approach. 
             results = model.fit(disp=0) #default newton fails for smaller N (even smaller site N)
             
             coef = results.params[stat_summary_name] # just for ROI
