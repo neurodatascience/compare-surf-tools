@@ -15,6 +15,7 @@ parser.add_argument('-f','--feature',nargs='+', help='feature column from the de
 parser.add_argument('-r','--removeCols',help='drop columns with this condition - needs to be a number')
 parser.add_argument('-n','--NameOfSubjectColumn', type=str, help='Column name for subject ID')
 parser.add_argument('-b','--batch', type=int, help='batch size')
+parser.add_argument('-c','--columnHeader', type=bool, help='batch size')
 parser.add_argument('-o','--output',help='output csv for average thickness')
 
 args = parser.parse_args()
@@ -26,14 +27,15 @@ drop_condition = args.removeCols
 Subject_id_col = args.NameOfSubjectColumn
 batch_size = args.batch
 out_csv = args.output
+header = args.columnHeader
 demoMerged_csv = out_csv + 'demoMerged'
 nonzero_csv = out_csv + '_nonzero.csv'
 
 # Get number of subjects and vertecies
-tmp_df = pd.read_csv(vertex_file, header=None, nrows=1)
+tmp_df = pd.read_csv(vertex_file, header=header, nrows=1)
 n_col = tmp_df.shape[1]-1 # all columns except  Subject ID
 del tmp_df
-tmp_df = pd.read_csv(vertex_file, header=None, usecols=[0]) #first column is Subject ID
+tmp_df = pd.read_csv(vertex_file, header=header, usecols=[0]) #first column is Subject ID
 n_sub = tmp_df.shape[0]
 
 print('Number of subjects {}, number of vertices {}'.format(n_sub, n_col))
@@ -58,9 +60,9 @@ if demo_file is not None:
     print('Splitting {} subjects into batches of {} giving {} iterations'.format(n_sub,batch_size,n_iter))  
     for i in range(n_iter):
         if i == n_iter - 1:
-            data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows)
+            data_df = pd.read_csv(vertex_file, header=header, skiprows = skip_rows)
         else: 
-            data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
+            data_df = pd.read_csv(vertex_file, header=header, skiprows = skip_rows, nrows = batch_size)
         
         print('Reading rows {}:{}'.format(skip_rows,skip_rows+batch_size))
         data_df.columns = [Subject_id_col] + mr_cols
@@ -111,7 +113,6 @@ if drop_condition is not None:
             data_df = pd.read_csv(demoMerged_csv, nrows = batch_size)
             all_cols = data_df.columns
         elif i == n_iter - 1:
-            print('i am here 0')
             data_df = pd.read_csv(demoMerged_csv, header=None,  skiprows = skip_rows+1)
         else: 
             data_df = pd.read_csv(demoMerged_csv, header=None,  skiprows = skip_rows+1, nrows=batch_size)
