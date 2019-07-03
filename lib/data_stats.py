@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score, permutation_test_score
 from sklearn.model_selection import RepeatedStratifiedKFold, StratifiedKFold, ShuffleSplit
+from sklearn.feature_selection import RFECV
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import statsmodels.stats.multitest as smm
@@ -73,40 +74,45 @@ def generate_pairwise_membership(df,m_col):
 
     
 # ML model perfs
-def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10):
+def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10,n_jobs=1):
     """ Compares performance of different pipeline outputs for a given ML Model
         Calls getMLModelPerf to get individual model performances
     """
     pipelines = df['pipeline'].unique()
     print('Running ML classifer on {} pipelines'.format(len(pipelines)))
     scores_concat_df = pd.DataFrame()
+    feature_rank_concat_df = pd.DataFrame()
     perf_pval_dict = {}
     for pipe in pipelines:
         ml_df = df[df['pipeline']==pipe]
         print('Pipeline {}'.format(pipe))
-        scores_df, null_df, pvalue = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits,n_repeats)    
+        scores_df, null_df, pvalue, feature_rank_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits,n_repeats,n_jobs)    
         scores_df['pipeline'] = np.tile(pipe,len(scores_df))
         null_df['pipeline'] = np.tile('null',len(null_df))
         scores_concat_df = scores_concat_df.append(scores_df).append(null_df)
         perf_pval_dict[pipe] = pvalue
+        feature_rank_df['pipeline'] = np.tile(pipe,len(feature_rank_df))
+        feature_rank_concat_df = feature_rank_concat_df.append(feature_rank_df)
+    return scores_concat_df, perf_pval_dict, feature_rank_concat_df
 
-    return scores_concat_df, perf_pval_dict
-
-def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10):
+def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10,n_jobs=1):
     """ Takes a model (classification or regression) instance and computes cross val scores.
         Uses repeated stratified KFold for classification and ShuffeSplit for regression.
     """     
     X = ml_df[roi_cols].values
-
+    X_col_names = roi_cols.copy()
     # Check input var types and create dummy vars if needed
     if len(covar_continuous_cols) > 0:
         X_continuous_covar = ml_df[covar_continuous_cols].values
         print('Using {} continuous covar'.format(len(covar_continuous_cols)))
         X = np.hstack((X, X_continuous_covar))
+        X_col_names += covar_continuous_cols
     if len(covar_cat_cols) > 0:
-        X_cat_covar = pd.get_dummies(ml_df[covar_cat_cols]).values
+        X_cat_covar_df = pd.get_dummies(ml_df[covar_cat_cols])
+        X_cat_covar = X_cat_covar_df.values
         print('Using {} col for {} cat covar'.format(len(covar_cat_cols),X_cat_covar.shape[1]))
         X = np.hstack((X, X_cat_covar))
+        X_col_names += list(X_cat_covar_df.columns)
 
     if model_type.lower() == 'classification':
         y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
@@ -122,18 +128,32 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
         print('unknown model type {} (needs to be classification or regression)'.format(model_type))
 
     print('Using {} model with perf metric {}'.format(model_type, perf_metric))
-    perf = cross_val_score(ml_model, X, y, scoring=perf_metric,cv=cv)
+    perf = cross_val_score(ml_model, X, y, scoring=perf_metric,cv=cv, n_jobs=n_jobs)
     scores_df = pd.DataFrame(columns=[perf_metric])
     scores_df[perf_metric] = perf
     print(' Perf mean:{:4.3f}, sd:{:4.3f}'.format(np.mean(perf),np.std(perf)))
 
     # Null model 
     null_cv = ShuffleSplit(n_splits=n_repeats, random_state=0) #10x10xn_permutations are too many. 
-    score, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=10, n_jobs=2)
+    _, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=10, n_jobs=n_jobs)
     null_df = pd.DataFrame()
     null_df[perf_metric] = permutation_scores
 
-    return scores_df, null_df, pvalue
+    # Feature ranks based on RFECV
+    feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, n_jobs=n_jobs)
+    feature_ranks_df = pd.DataFrame()
+    feature_ranks_df['predictor'] = X_col_names
+    feature_ranks_df['rank'] = feature_ranks
+    feature_ranks_df['grid_scores'] = feature_grid_scores
+
+    return scores_df, null_df, pvalue, feature_ranks_df
+
+def get_feature_importance(model, X, y, n_jobs, step=1, cv=10):
+    selector = RFECV(model, step=1, cv=cv, n_jobs=n_jobs)
+    selector = selector.fit(X, y)
+    feature_ranks = selector.ranking_
+    feature_grid_scores = selector.grid_scores_
+    return feature_ranks, feature_grid_scores
 
 # Stat model perfs
 
