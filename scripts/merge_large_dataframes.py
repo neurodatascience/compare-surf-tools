@@ -15,7 +15,6 @@ parser.add_argument('-f','--feature',nargs='+', help='feature column from the de
 parser.add_argument('-r','--removeCols',help='drop columns with this condition - needs to be a number')
 parser.add_argument('-n','--NameOfSubjectColumn', type=str, help='Column name for subject ID')
 parser.add_argument('-b','--batch', type=int, help='batch size')
-parser.add_argument('-c','--columnHeader', type=bool, help='batch size')
 parser.add_argument('-o','--output',help='output csv for average thickness')
 
 args = parser.parse_args()
@@ -27,15 +26,14 @@ drop_condition = args.removeCols
 Subject_id_col = args.NameOfSubjectColumn
 batch_size = args.batch
 out_csv = args.output
-header = args.columnHeader
-demoMerged_csv = out_csv + 'demoMerged'
+demoMerged_csv = out_csv + '_demoMerged.csv'
 nonzero_csv = out_csv + '_nonzero.csv'
 
 # Get number of subjects and vertecies
-tmp_df = pd.read_csv(vertex_file, header=header, nrows=1)
+tmp_df = pd.read_csv(vertex_file, nrows=1)
 n_col = tmp_df.shape[1]-1 # all columns except  Subject ID
 del tmp_df
-tmp_df = pd.read_csv(vertex_file, header=header, usecols=[0]) #first column is Subject ID
+tmp_df = pd.read_csv(vertex_file, header=None, usecols=[0]) #first column is Subject ID
 n_sub = tmp_df.shape[0]
 
 print('Number of subjects {}, number of vertices {}'.format(n_sub, n_col))
@@ -52,6 +50,8 @@ if demo_file is not None:
     print('Merging demographic info')
     # Read demographics
     demo_df_long = pd.read_csv(demo_file)
+    demo_df_long['DX_GROUP'] = demo_df_long['DX_GROUP'].replace({2:0})
+    demo_df_long['SEX'] = demo_df_long['SEX']-1
     demo_df = demo_df_long[[Subject_id_col]+feat_col]
     print('Shape of demo_df {}'.format(demo_df.shape))
     print('Using these demographic columns for merge {}'.format(feat_col))
@@ -60,9 +60,9 @@ if demo_file is not None:
     print('Splitting {} subjects into batches of {} giving {} iterations'.format(n_sub,batch_size,n_iter))  
     for i in range(n_iter):
         if i == n_iter - 1:
-            data_df = pd.read_csv(vertex_file, header=header, skiprows = skip_rows)
+            data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows)
         else: 
-            data_df = pd.read_csv(vertex_file, header=header, skiprows = skip_rows, nrows = batch_size)
+            data_df = pd.read_csv(vertex_file, header=None, skiprows = skip_rows, nrows = batch_size)
         
         print('Reading rows {}:{}'.format(skip_rows,skip_rows+batch_size))
         data_df.columns = [Subject_id_col] + mr_cols
@@ -79,7 +79,7 @@ if demo_file is not None:
 
 if drop_condition is not None:
     drop_condition = int(drop_condition)
-    print('Dropping columns with all {}',format(drop_condition))
+    print('Dropping columns with all {}'.format(drop_condition))
     # Need to read all rows and few columns to make sure every subject has 0s in that column (vertex)
     
     n_iter_col = n_col//col_size
@@ -93,15 +93,15 @@ if drop_condition is not None:
         end_col = start_col + col_size
         print('Reading columns {}:{}'.format(start_col,end_col))
         col_subset =  mr_cols[start_col:end_col]
-        data_df =pd.read_csv(demoMerged_csv,usecols=col_subset)
+        data_df = pd.read_csv(demoMerged_csv, usecols=col_subset)
         data_df = data_df.loc[:, (data_df != drop_condition).any(axis=0)]
         non_zero_cols = non_zero_cols + list(data_df.columns)
         start_col += col_size
         del data_df
 
     non_zero_cols = [Subject_id_col] + non_zero_cols + feat_col
+    print(len(feat_col))
     print("Number of non-zero columns across all subjects: {}".format(len(non_zero_cols)))
-    print(non_zero_cols[:5])
 
     # One you have the list of nonzero columns you can re-read the csv by rows
     print('Writing csv with dropped columns')
