@@ -45,7 +45,7 @@ def get_pysurfer_label_format(labels, aparc, betas=None):
     return labels_std_L, labels_std_R, betas_L, betas_R
 
 
-def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view='lateral',signifcance_color=[],plot_style={}):
+def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view,signifcance_color=[],plot_style={}):
     """
     Creates a pysurfer brain, overlays surface parcellation, and colormaps given ROIs 
     Used for plotting signficant ROIs
