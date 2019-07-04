@@ -140,7 +140,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
     null_df[perf_metric] = permutation_scores
 
     # Feature ranks based on RFECV
-    feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, n_jobs=n_jobs)
+    feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, perf_metric, n_jobs=n_jobs)
     feature_ranks_df = pd.DataFrame()
     feature_ranks_df['predictor'] = X_col_names
     feature_ranks_df['rank'] = feature_ranks
@@ -148,8 +148,8 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
 
     return scores_df, null_df, pvalue, feature_ranks_df
 
-def get_feature_importance(model, X, y, n_jobs, step=1, cv=10):
-    selector = RFECV(model, step=1, cv=cv, n_jobs=n_jobs)
+def get_feature_importance(model, X, y, perf_metric, n_jobs, step=1, cv=10):
+    selector = RFECV(model, step=1, scoring=perf_metric, cv=cv, n_jobs=n_jobs)
     selector = selector.fit(X, y)
     feature_ranks = selector.ranking_
     feature_grid_scores = selector.grid_scores_
@@ -270,12 +270,12 @@ def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_mod
 
     return scores_df
 
-def aggregate_perf(df,measure,compare_type,p_thresh=0.05):
+def aggregate_perf(df,measure,thresh=0.05):
     """ Aggregates performance from different pipeline variations (tools, atlases)
         Currently aggregates using simple ranking 
     """
     df_agg = pd.DataFrame(columns=['roi','rank'])
-    df['significance'] = df[measure] < p_thresh
+    df['significance'] = df[measure] < thresh
     roi_list = df['roi'].unique()
     rank_list = []
     for roi in roi_list:
