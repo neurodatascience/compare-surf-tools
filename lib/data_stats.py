@@ -106,14 +106,15 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
         X_continuous_covar = ml_df[covar_continuous_cols].values
         print('Using {} continuous covar'.format(len(covar_continuous_cols)))
         X = np.hstack((X, X_continuous_covar))
-        X_col_names += covar_continuous_cols
+        X_col_names += list(covar_continuous_cols)
     if len(covar_cat_cols) > 0:
         X_cat_covar_df = pd.get_dummies(ml_df[covar_cat_cols])
         X_cat_covar = X_cat_covar_df.values
-        print('Using {} col for {} cat covar'.format(len(covar_cat_cols),X_cat_covar.shape[1]))
+        print('Using {} categorical cols as {} cat covar (dummies)'.format(covar_cat_cols,X_cat_covar.shape[1]))
         X = np.hstack((X, X_cat_covar))
         X_col_names += list(X_cat_covar_df.columns)
 
+    print('n of input columns: {}'.format(len(X_col_names)))
     if model_type.lower() == 'classification':
         y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
         print('Data shapes X {}, y {} ({})'.format(X.shape, len(y), list(ml_df[outcome_col].value_counts())))  
@@ -140,7 +141,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
     null_df[perf_metric] = permutation_scores
 
     # Feature ranks based on RFECV
-    feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, perf_metric, n_jobs=n_jobs)
+    feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, perf_metric, cv=cv, n_jobs=n_jobs)
     feature_ranks_df = pd.DataFrame()
     feature_ranks_df['predictor'] = X_col_names
     feature_ranks_df['rank'] = feature_ranks
@@ -148,7 +149,7 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
 
     return scores_df, null_df, pvalue, feature_ranks_df
 
-def get_feature_importance(model, X, y, perf_metric, n_jobs, step=1, cv=10):
+def get_feature_importance(model, X, y, perf_metric, n_jobs, step=1, cv=5):
     selector = RFECV(model, step=1, scoring=perf_metric, cv=cv, n_jobs=n_jobs)
     selector = selector.fit(X, y)
     feature_ranks = selector.ranking_
