@@ -74,7 +74,7 @@ def generate_pairwise_membership(df,m_col):
 
     
 # ML model perfs
-def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10,n_jobs=1):
+def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits=10,n_repeats=10,n_jobs=1):
     """ Compares performance of different pipeline outputs for a given ML Model
         Calls getMLModelPerf to get individual model performances
     """
@@ -86,7 +86,7 @@ def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,out
     for pipe in pipelines:
         ml_df = df[df['pipeline']==pipe]
         print('Pipeline {}'.format(pipe))
-        scores_df, null_df, pvalue, feature_rank_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits,n_repeats,n_jobs)    
+        scores_df, null_df, pvalue, feature_rank_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits,n_repeats,n_jobs)    
         scores_df['pipeline'] = np.tile(pipe,len(scores_df))
         null_df['pipeline'] = np.tile('null',len(null_df))
         scores_concat_df = scores_concat_df.append(scores_df).append(null_df)
@@ -95,7 +95,7 @@ def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,out
         feature_rank_concat_df = feature_rank_concat_df.append(feature_rank_df)
     return scores_concat_df, perf_pval_dict, feature_rank_concat_df
 
-def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,n_splits=10,n_repeats=10,n_jobs=1):
+def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits=10,n_repeats=10,n_jobs=1):
     """ Takes a model (classification or regression) instance and computes cross val scores.
         Uses repeated stratified KFold for classification and ShuffeSplit for regression.
     """     
@@ -141,11 +141,12 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
     null_df[perf_metric] = permutation_scores
 
     # Feature ranks based on RFECV
-    feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, perf_metric, cv=cv, n_jobs=n_jobs)
     feature_ranks_df = pd.DataFrame()
-    feature_ranks_df['predictor'] = X_col_names
-    feature_ranks_df['rank'] = feature_ranks
-    feature_ranks_df['grid_scores'] = feature_grid_scores
+    if rank_features:
+        feature_ranks, feature_grid_scores = get_feature_importance(ml_model, X, y, perf_metric, cv=cv, n_jobs=n_jobs)
+        feature_ranks_df['predictor'] = X_col_names
+        feature_ranks_df['rank'] = feature_ranks
+        feature_ranks_df['grid_scores'] = feature_grid_scores
 
     return scores_df, null_df, pvalue, feature_ranks_df
 
