@@ -45,19 +45,19 @@ def get_pysurfer_label_format(labels, aparc, betas=None):
     return labels_std_L, labels_std_R, betas_L, betas_R
 
 
-def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,view,signifcance_color=[],plot_style={}):
+def create_surface_plot(common_space,hemi,surf,aparc_file,signific_rois,save_dir,title,view,signifcance_color=[],plot_style={}):
     """
     Creates a pysurfer brain, overlays surface parcellation, and colormaps given ROIs 
     Used for plotting signficant ROIs
     If significance color (effect size / betas) are provided (in the same order as significant ROIs) then uses it as a colormap
     """
-    brain = Brain(subject_id, hemi, surf, background="white",title=title,views=view)
+    brain = Brain(common_space, hemi, surf, background="white",title=title,views=view)
 
     if len(signific_rois) > 0:
-        aparc_file = os.path.join(os.environ["SUBJECTS_DIR"],
-                                subject_id, "label",
-                                hemi + aparc)
-        labels, ctab, names = nib.freesurfer.read_annot(aparc_file)
+        aparc_file_path = os.path.join(os.environ["SUBJECTS_DIR"],
+                                common_space, "label",
+                                hemi + aparc_file)
+        labels, ctab, names = nib.freesurfer.read_annot(aparc_file_path)
 
         print('number of total vertices {} and ROIs {}'.format(len(labels),len(names)))
         
@@ -83,7 +83,7 @@ def create_surface_plot(subject_id,hemi,surf,aparc,signific_rois,save_dir,title,
         vtx_data[labels == -1] = 0
 
         unique, counts = np.unique(vtx_data, return_counts=True)
-        print('atlas: {}, signficant roi count: {}'.format(aparc, dict(zip(unique, counts))))
+        print('atlas: {}, signficant roi count: {}'.format(aparc_file, dict(zip(unique, counts))))
 
         #plot style and aesthetic
         if 'colormap' in plot_style.keys():
