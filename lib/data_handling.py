@@ -34,8 +34,8 @@ def filter_data(data_df, subject_ID_col, qc_df, qc_criterion, external_criterion
             
     return filtered_df
 
-def combine_processed_data(data_dict, subject_ID_col, na_action):
-    """ Reads CSV outputs from the processed MR images by pipelines such as FreeSurfer, ANTs, CIVET, etc.
+def combine_processed_data(data_dict, subject_ID_col, na_action, data_label='software'):
+    """ Reads CSV outputs from the processed MR images by software such as FreeSurfer, ANTs, CIVET, etc.
     """ 
     n_datasets = len(data_dict)
     print('Number of datasets: {}'.format(n_datasets))
@@ -76,7 +76,7 @@ def combine_processed_data(data_dict, subject_ID_col, na_action):
         print('Shape of the dataframe based on common cols and subs {}'.format(data.shape))
         if check_processed_data(data,common_cols,na_action):
             print('Basic data check passed')
-            data['pipeline'] = np.tile(dataset_name,len(data))
+            data[data_label] = np.tile(dataset_name,len(data))
             df_concat = df_concat.append(data,sort=True)
             print('Shape of the concat dataframe {}'.format(df_concat.shape))
 

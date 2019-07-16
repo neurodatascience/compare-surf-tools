@@ -32,9 +32,7 @@ def cross_correlations(df1,df2,subject_ID_col):
     df2 = df2.rename(columns={'{}_df2'.format(subject_ID_col):subject_ID_col})
 
     concat_df = df1.merge(df2, on=subject_ID_col)
-    #print('Shape of concatinated dataframe of two pipelines {}'.format(concat_df.shape))
     corr_mat = concat_df.corr()
-    #print('Shape of corr mat {}'.format(corr_mat.shape))
     xcorr_dig = corr_mat.values[:n_roi,n_roi:2*n_roi].diagonal()
     xcorr_df = pd.DataFrame(columns=['ROI','correlation'])
     xcorr_df['ROI'] = corr_mat.columns[:n_roi] 
@@ -55,13 +53,13 @@ def calculate_pvalues(df):
     return pvalues
 
 # cluster memberships
-def get_cluster_membership(_df,g,n_clusters):
+def get_cluster_membership(_df,data_label,g,n_clusters):
     member_df = _df[['SubjID']].copy()
     Z = g.dendrogram_row.linkage
     T = sch.fcluster(Z, n_clusters, 'maxclust')
     member_count = collections.Counter(T)
-    pipe = _df['pipeline'].values[0]
-    print('Pipeline {}, cluster sizes {}'.format(pipe, member_count))
+    pipe = _df[data_label].values[0]
+    print('{} {}, cluster sizes {}'.format(data_label, pipe, member_count))
     member_df['membership_{}'.format(pipe)] = T
     return member_df
 
@@ -74,24 +72,24 @@ def generate_pairwise_membership(df,m_col):
 
     
 # ML model perfs
-def computePipelineMLModels(df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits=10,n_repeats=10,n_jobs=1):
-    """ Compares performance of different pipeline outputs for a given ML Model
+def computeSoftwareMLModels(df,data_label,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits=10,n_repeats=10,n_jobs=1):
+    """ Compares performance of different software outputs for a given ML Model
         Calls getMLModelPerf to get individual model performances
     """
-    pipelines = df['pipeline'].unique()
-    print('Running ML classifer on {} pipelines'.format(len(pipelines)))
+    software_list = df[data_label].unique()
+    print('Running ML classifer on {} {}'.format(len(software_list),data_label))
     scores_concat_df = pd.DataFrame()
     feature_rank_concat_df = pd.DataFrame()
     perf_pval_dict = {}
-    for pipe in pipelines:
-        ml_df = df[df['pipeline']==pipe]
-        print('Pipeline {}'.format(pipe))
+    for pipe in software_list:
+        ml_df = df[df[data_label]==pipe]
+        print('{} {}'.format(data_label, pipe))
         scores_df, null_df, pvalue, feature_rank_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits,n_repeats,n_jobs)    
-        scores_df['pipeline'] = np.tile(pipe,len(scores_df))
-        null_df['pipeline'] = np.tile('null',len(null_df))
+        scores_df[data_label] = np.tile(pipe,len(scores_df))
+        null_df[data_label] = np.tile('null',len(null_df))
         scores_concat_df = scores_concat_df.append(scores_df).append(null_df)
         perf_pval_dict[pipe] = pvalue
-        feature_rank_df['pipeline'] = np.tile(pipe,len(feature_rank_df))
+        feature_rank_df[data_label] = np.tile(pipe,len(feature_rank_df))
         feature_rank_concat_df = feature_rank_concat_df.append(feature_rank_df)
     return scores_concat_df, perf_pval_dict, feature_rank_concat_df
 
@@ -163,20 +161,20 @@ def getCorrectedPValues(pval_raw,alpha=0.05,method='fdr_i'):
     rej, pval_corr = smm.multipletests(pval_raw, alpha=alpha, method=method)[:2]
     return pval_corr
 
-def computePipelineStatsModels(df,roi_cols,covar_cols,outcome_col,signific_col,stat_model):
-    """ Compares performance of different pipeline outputs for a given ML Model
+def computeSoftwareStatsModels(df,data_label,roi_cols,covar_cols,outcome_col,signific_col,stat_model):
+    """ Compares performance of different software outputs for a given ML Model
         Calls getStatModelPerf to get individual model performances
     """
-    pipelines = df['pipeline'].unique()
-    print('Running {} mass-univariate {} statsmodels on {} pipelines'.format(len(roi_cols), stat_model, len(pipelines)))
+    software_list = df[data_label].unique()
+    print('Running {} mass-univariate {} statsmodels on {} {}'.format(len(roi_cols), stat_model, len(software_list),data_label))
     
     # index results on ROI names
     scores_concat_df = pd.DataFrame()
-    for pipe in pipelines:
-        sm_df = df[df['pipeline']==pipe]
-        print('Pipeline {}'.format(pipe))
+    for pipe in software_list:
+        sm_df = df[df[data_label]==pipe]
+        print('{} {}'.format(data_label, pipe))
         scores_df = getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model)
-        scores_df['pipeline'] = np.tile(pipe,len(scores_df))
+        scores_df[data_label] = np.tile(pipe,len(scores_df))
         scores_concat_df = scores_concat_df.append(scores_df)
         print('Top 10 significant regions:\n {}'.format(scores_df.sort_values(by=['p_val']).head(10)))
 
