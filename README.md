@@ -18,15 +18,15 @@ Consolidated from the analysis results provided at http://preprocessed-connectom
 
 * ABIDE_Phenotype.csv             : phenotypic data for the subjects
 * ANTs, CIVET, FS*                : preproc software output (ROI-wise) 
+* QC                              : QC lists from manual and automatic outlier detection
 
 Legacy: 
 - see https://github.com/companat/compare-surf-tools for details
 
 ## Code
-Current:     
 * notebooks: driver code to run analysis 
 * lib: helper functions for parsing and analysis
-* scripts: code to read pipeline output (civet2.1, fs6.0) 
+* scripts: code to read software output (civet2.1, fs6.0) 
 ```
 .
 ├──  notebooks           
