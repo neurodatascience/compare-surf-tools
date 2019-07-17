@@ -3,7 +3,7 @@ An extension of BrainHack Project (https://github.com/companat/compare-surf-tool
 
 ## Objectives
 - Compare output of preprocessing pipelines for structural MR imaging 
-  - Software: Freesurfer (v5.1, v5.3, v6.0, ANTs, CIVET2.1)  
+  - Software: Freesurfer (v5.1, v5.3, v6.0) ANTs, CIVET2.1
   - Atlases: ROI-wise (surface parcellations: DKT40, Destrieux, Glasser)
   - analytic comparisons: classifier performance (individual predictions), statistical inference (biological group differences)  
 - Quality control
@@ -65,3 +65,6 @@ python get_roi_data_fs.py -s ../data/subjects -l ../data/subject_list.txt -m thi
 B. Data standardization and cmparative analyses
  - run_atlas_comparisons.ipynb
  - run_software_comparisons.ipynb
+ 
+C. Visualization of brainmaps
+ - generate_plots.ipynb
