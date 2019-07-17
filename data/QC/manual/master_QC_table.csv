@@ -1,0 +1,1032 @@
+,Site_ID,SubjID,QC_gleb,description_gleb,QC_maarten
+0,Caltech,0051456,-1,gradient too high around sensorimotor strip and V1),0
+1,Caltech,0051457,-1,gradient too high around sm strip and to some extent V1),0
+2,Caltech,0051458,-1,slightly too high gradient on sm strip,0
+3,Caltech,0051459,-1,more problematic in V1 than in sm strip; some gm surface problems in occipital),0
+4,Caltech,0051460,-1,V1 worse than sm strip),0
+5,Caltech,0051461,1,better than previous,0
+6,Caltech,0051462,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+7,Caltech,0051463,1,same little problem with lateral V1/V2 though),0
+8,Caltech,0051464,-1,this time white space in left lateral V1/V2 is a bit too broad),0
+9,Caltech,0051465,1,much better than previous,0
+10,Caltech,0051466,-1,more problematic in left lateral V1),0
+11,Caltech,0051467,1,same problem but less than before),0
+12,Caltech,0051468,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+13,Caltech,0051469,-1,more problematic in left sm,0
+14,Caltech,0051470,-1,same V1+sm problem),0
+15,Caltech,0051471,-1,HUGE v1 gradient issue),0
+16,Caltech,0051472,-1,same issue w/sm and V1),0
+17,Caltech,0051473,-1,same issue,0
+18,Caltech,0051474,-1,same; really large area in V1,0
+19,Caltech,0051475,-1,a bit less than previous,0
+20,Caltech,0051476,-1,about as bad as previous),0
+21,Caltech,0051477,-1,greater expansion in v1),0
+22,Caltech,0051478,-1,same problems),0
+23,Caltech,0051479,-1,quite bad,0
+24,Caltech,0051480,-1,mostly right V1,0
+25,Caltech,0051481,-1,quite bad on bilateral sm and v1),0
+26,Caltech,0051482,-1,mostly left v1,0
+27,Caltech,0051483,1,m/b the best so far,0
+28,Caltech,0051484,1,a bit worse than previous,0
+29,Caltech,0051485,1,worst part is right v1),0
+30,Caltech,0051486,1,same as above,0
+31,Caltech,0051487,-1,more or less the same,0
+32,Caltech,0051488,1,better than most before),0
+33,Caltech,0051489,-1,bilateral v1 problem,0
+34,Caltech,0051490,-1,very problematic v1,0
+35,Caltech,0051491,-1,v1_l,0
+36,Caltech,0051492,-1,average badness),0
+37,Caltech,0051493,-1,again),0
+38,CMU_a,0050642,-1,same badness for v1; better for sm strip; lookup in Register suggested registr-n was ok but surfs were not),0
+39,CMU_a,0050646,1,very few gradient problems),0
+40,CMU_a,0050647,1,only few bad gradient bits in pfcorb),0
+41,CMU_a,0050649,1,just a bit of bad gradient in pfcorb and partially temporal pole),0
+42,CMU_a,0050653,-1,left v1 gradient is a bit bad),0
+43,CMU_a,0050654,1,slight gradient bits here and there),0
+44,CMU_a,0050656,1,small issues in pfcorb and teporal pole),0
+45,CMU_a,0050659,1,same as previous),0
+46,CMU_a,0050660,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+47,CMU_a,0050663,1,a bit in pfcorb and temporal pole),0
+48,CMU_a,0050664,1,like previous),0
+49,CMU_a,0050665,1,tiny bits in pfcorb and temporal pole and a bit of v1),0
+50,CMU_a,0050666,-1,biggest issue is right somatosensory and bilateral pfcorb),0
+51,CMU_a,0050668,1,pfcorb and tpole),0
+52,CMU_b,0050643,1,same as above),0
+53,CMU_b,0050644,1,slightly better than previous),0
+54,CMU_b,0050645,1,like previous),0
+55,CMU_b,0050648,1,slightly larger gradient expansions in problematic areas),0
+56,CMU_b,0050650,-1,a bunch of small issues in problematic regions),0
+57,CMU_b,0050651,-1,same as above and surface is also a bit strange),0
+58,CMU_b,0050652,-1,pfcorb and s1 with a bit of v1),0
+59,CMU_b,0050655,-1,pfcorb and left v1 with a bit of s1),0
+60,CMU_b,0050657,1,much better but still a few problems with pfcorb and v1),0
+61,CMU_b,0050658,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+62,CMU_b,0050661,1,small issues but generally good especially in pfc),0
+63,CMU_b,0050667,-1,much worse especially in v1),0
+64,CMU_b,0050669,-1,bilateral pfcorb tpole and left v1),0
+65,KKI,0050772,1,almost perfect except a little bit in left temporal),0
+66,KKI,0050773,1,pretty much perfect),0
+67,KKI,0050774,1,,0
+68,KKI,0050775,1,only some tiny issue in left pfc),0
+69,KKI,0050776,1,,0
+70,KKI,0050777,1,,0
+71,KKI,0050778,1,,0
+72,KKI,0050779,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+73,KKI,0050780,1,,0
+74,KKI,0050781,1,,0
+75,KKI,0050782,1,,0
+76,KKI,0050783,1,,0
+77,KKI,0050784,1,surface is slightly less nice than the previous ones),0
+78,KKI,0050785,0,something went utterly wrong with the surface; seems like severe motion artefacts),0
+79,KKI,0050786,1,,0
+80,KKI,0050787,1,surface shape is so-so but gradient seems fine),0
+81,KKI,0050788,1,,0
+82,KKI,0050789,-1,surface is so-so and left tpole gradient is a bit too large at places),0
+83,KKI,0050790,-1,surface a bit strange and asymmetric even if the gradient values are nice),0
+84,KKI,0050791,1,better but surface still a bit jagged),0
+85,KKI,0050792,-1,surface is so-so and some bad gradient values scattered),0
+86,KKI,0050793,-1,surface strange in temporal; high gradient in right pfcorb),0
+87,KKI,0050794,1,better; surface still a bit jagged),0
+88,KKI,0050795,1,,0
+89,KKI,0050796,-1,same temporal surf issue and some high gradients),0
+90,KKI,0050797,1,not perfect but better),0
+91,KKI,0050798,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+92,KKI,0050799,1,brain a bit weird and surf so-so but overall gradient is good),0
+93,KKI,0050800,1,better),0
+94,KKI,0050801,1,,0
+95,KKI,0050802,1,,0
+96,KKI,0050803,1,,0
+97,KKI,0050804,1,temporal shape is a bit weird but generally ok),0
+98,KKI,0050805,1,,0
+99,KKI,0050806,-1,surface jagged and high gradient in left inferior temporal and right tpole),0
+100,KKI,0050807,-1,strange brain shape and occasional high gradient values),0
+101,KKI,0050808,1,better though still some jaggedness in temporal surface),0
+102,KKI,0050809,-1,some high temporal gradient values; surface jagged),0
+103,KKI,0050810,1,,0
+104,KKI,0050811,-1,jaggedness and gradients),0
+105,KKI,0050812,1,better but still jagged),0
+106,KKI,0050813,1,same as above),0
+107,KKI,0050814,1,,0
+108,KKI,0050816,1,,0
+109,KKI,0050817,1,,0
+110,KKI,0050818,-1,weird asymmetries; part of image [esp. cerebellum] seem missing),0
+111,KKI,0050819,1,,0
+112,KKI,0050820,1,,0
+113,KKI,0050821,-1,surface [and its gradients] seems strange in medial pfc and some other locations),0
+114,KKI,0050822,1,,0
+115,KKI,0050823,1,,0
+116,KKI,0050824,-1,surface a bit too jagged and asymmetric; left pfc has some high grad vals),0
+117,KKI,0050825,-1,same as previous; not horrible but not good enough),0
+118,Leuven_1,0050682,-1,this time grad vals a bit too high in right parietal),0
+119,Leuven_1,0050683,0,something went wrong in parietal surf; seems like partial vol made it jump through dura/skull border),0
+120,Leuven_1,0050685,-1,surf so-so and left tpole grad too high),0
+121,Leuven_1,0050686,1,surf still not exactly perfect but acceptable,0
+122,Leuven_1,0050687,1,,0
+123,Leuven_1,0050688,1,,0
+124,Leuven_1,0050689,1,,0
+125,Leuven_1,0050690,1,,0
+126,Leuven_1,0050691,1,,0
+127,Leuven_1,0050692,1,,0
+128,Leuven_1,0050693,1,,0
+129,Leuven_1,0050694,-1,surf so-so and some high grad vals in tpole and parietal),0
+130,Leuven_1,0050695,-1,asymmetry; jaggedness; right parietal has some high grad vals),0
+131,Leuven_1,0050696,-1,right parietal surf jumps out a bit),0
+132,Leuven_1,0050697,-1,surfa suboptimal; right parietal grad high),0
+133,Leuven_1,0050698,1,,0
+134,Leuven_1,0050699,-1,left parietal surf 'jump' through dura to skull),0
+135,Leuven_1,0050700,1,,0
+136,Leuven_1,0050701,-1,surf so-so and left pfcorb grad high),0
+137,Leuven_1,0050702,-1,surf so-so and left medial pfc grad hi),0
+138,Leuven_1,0050703,1,,0
+139,Leuven_1,0050704,1,,0
+140,Leuven_1,0050705,1,,0
+141,Leuven_1,0050706,1,some surface funkiness in right parietal but generally ok),0
+142,Leuven_1,0050707,1,,0
+143,Leuven_1,0050708,-1,right pfcorb gradient; asymmetry; jaggedness),0
+144,Leuven_1,0050709,1,,0
+145,Leuven_1,0050710,1,,0
+146,Leuven_1,0050711,1,,0
+147,Leuven_2,0050722,1,,0
+148,Leuven_2,0050723,1,,0
+149,Leuven_2,0050724,1,,0
+150,Leuven_2,0050725,1,,0
+151,Leuven_2,0050726,1,some tiny parietal peninsulae but overall good),0
+152,Leuven_2,0050727,1,,0
+153,Leuven_2,0050728,1,,0
+154,Leuven_2,0050730,1,tcpol a bit jagged),0
+155,Leuven_2,0050731,-1,right parietal peninsula too big jumping to skull; see screenshot),0
+156,Leuven_2,0050732,1,,0
+157,Leuven_2,0050733,1,,0
+158,Leuven_2,0050734,-1,right parietal skull jump),0
+159,Leuven_2,0050735,1,a little jump into fornix or like),0
+160,Leuven_2,0050736,-1,hi grad in right tpol; asymmetry; jaggedness),0
+161,Leuven_2,0050737,-1,pretty severe right parietal skull jump),0
+162,Leuven_2,0050738,0,very severe right parietal skull jump; apparent motion artefacts),0
+163,Leuven_2,0050739,-1,smaller parietal jump but still too much to be happy),0
+164,Leuven_2,0050740,0,severe parietal and some temporal surface distortions),0
+165,Leuven_2,0050741,0,about as bad as above),0
+166,Leuven_2,0050742,1,,0
+167,Leuven_2,0050743,1,,0
+168,Leuven_2,0050744,-1,jagged surface especially in pfc; some over-high gradients,0
+169,Leuven_2,0050745,1,,0
+170,Leuven_2,0050746,-1,high gradients and parietal jumps),0
+171,Leuven_2,0050747,1,,0
+172,Leuven_2,0050748,1,,0
+173,Leuven_2,0050749,1,,0
+174,Leuven_2,0050750,-1,overhigh gradient on left temporal),0
+175,Leuven_2,0050751,1,,0
+176,Leuven_2,0050752,-1,parietal jumps),0
+177,Leuven_2,0050753,-1,high gradient in right parietal and jagged temporal),0
+178,Leuven_2,0050754,1,,0
+179,Leuven_2,0050755,1,,0
+180,Leuven_2,0050756,1,,0
+181,Leuven_2,0050757,1,,0
+182,MaxMun_a,0051318,1,,0
+183,MaxMun_a,0051319,-1,surface jumps and some high gradients),0
+184,MaxMun_a,0051320,1,,0
+185,MaxMun_a,0051321,-1,hi grad in sm strip and pfcorb),0
+186,MaxMun_a,0051362,-1,large gradients and surface a bit strange especially in v1),0
+187,MaxMun_a,0051363,-1,bilateral pfcorb and right sm strip grad),0
+188,MaxMun_a,0051364,-1,high gradients and jagged surfs),0
+189,MaxMun_a,0051365,-1,same as above),0
+190,MaxMun_a,0051366,-1,sm strip grad),0
+191,MaxMun_a,0051367,-1,some overhigh gradients),0
+192,MaxMun_a,0051368,-1,same),0
+193,MaxMun_a,0051369,-1,same and jagged surface),0
+194,MaxMun_a,0051370,-1,temporal is particularly bad),0
+195,MaxMun_a,0051371,-1,same and surfaces are strange),0
+196,MaxMun_a,0051372,-1,sm strip grad and surf jumps),0
+197,MaxMun_a,0051373,-1,grads),0
+198,MaxMun_a,0051606,-1,better but still bad),0
+199,MaxMun_a,0051607,-1,grads and asymmetry),0
+200,MaxMun_b,0051322,-1,grads),0
+201,MaxMun_b,0051323,-1,right medial and left lateral pfc and some parietal grads too high),0
+202,MaxMun_b,0051324,-1,high grads in sm strip and temporal),0
+203,MaxMun_b,0051325,-1,right s1 and pfc; surf irreg and asymm),0
+204,MaxMun_b,0051326,-1,right sm and surf irreg),0
+205,MaxMun_b,0051327,-1,left sm and tpol and surf irreg),0
+206,MaxMun_c,0051328,-1,many hi grads; surf irreg assym jagg),0
+207,MaxMun_c,0051332,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+208,MaxMun_c,0051333,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+209,MaxMun_c,0051334,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+210,MaxMun_c,0051335,0,severaly hi grad all over the place),0
+211,MaxMun_c,0051336,-1,hi grad in v1 and sm strip),0
+212,MaxMun_c,0051338,-1,better but still few occurences of hi grad),0
+213,MaxMun_c,0051339,-1,same as previous),0
+214,MaxMun_c,0051340,1,,0
+215,MaxMun_c,0051341,-1,hi grad),0
+216,MaxMun_c,0051342,-1,same),0
+217,MaxMun_c,0051343,-1,even more),0
+218,MaxMun_c,0051344,-1,persists),0
+219,MaxMun_c,0051345,0,hi grad and really odd surface),0
+220,MaxMun_c,0051346,-1,very high grad),0
+221,MaxMun_c,0051347,-1,grad and asym),0
+222,MaxMun_d,0051329,-1,grad esp in v1),0
+223,MaxMun_d,0051330,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+224,MaxMun_d,0051331,-1,hi grad),0
+225,MaxMun_d,0051349,-1,same),0
+226,MaxMun_d,0051350,0,hi grad and bad surf),0
+227,MaxMun_d,0051351,-1,more or less the same),0
+228,MaxMun_d,0051354,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+229,MaxMun_d,0051356,-1,better but still lots of hi grad),0
+230,MaxMun_d,0051357,-1,same),0
+231,MaxMun_d,0051358,0,hi grad and bad surf),0
+232,MaxMun_d,0051359,-1,hi grad asym),0
+233,MaxMun_d,0051360,-1,hi grad jagged),0
+234,MaxMun_d,0051361,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+235,NYU,0050952,-1,some hi grads and bad parietal jumps),0
+236,NYU,0050953,1,,0
+237,NYU,0050954,1,some hi grad in left temporal tho),0
+238,NYU,0050955,-1,hi grads and odd surfs),2
+239,NYU,0050956,-1,same),0
+240,NYU,0050957,-1,hi grads in parietal and overall jaggedness),0
+241,NYU,0050958,-1,same),0
+242,NYU,0050959,1,,0
+243,NYU,0050960,-1,hi grad in v1 and strange surfs),0
+244,NYU,0050961,1,slightly hi grad in v1 and temp tho),0
+245,NYU,0050962,1,more or less the same),0
+246,NYU,0050964,1,,0
+247,NYU,0050965,-1,hi grad and peninsulae),0
+248,NYU,0050966,1,,0
+249,NYU,0050967,1,surf is so-so tho),0
+250,NYU,0050968,-1,hi grad in insula and peninsulae),0
+251,NYU,0050969,-1,hi grad and jagged surf),0
+252,NYU,0050970,-1,hi grad and bizarre surf),0
+253,NYU,0050971,1,,0
+254,NYU,0050972,-1,hi grad in right v1 and pfc),0
+255,NYU,0050973,-1,hi grad in right v1 and left sm),0
+256,NYU,0050974,1,,0
+257,NYU,0050975,1,,0
+258,NYU,0050976,-1,hi grads in parietal and temporal),0
+259,NYU,0050977,1,,0
+260,NYU,0050978,-1,hi grad and asym),0
+261,NYU,0050979,-1,strange surface due to overlooked motion artefact),0
+262,NYU,0050980,1,some hi grad in right its but seemingly due to tissue irregularities and possibly img qual),0
+263,NYU,0050981,-1,some hi grads),0
+264,NYU,0050982,-1,sm strip grad and weird surf due to overlooked slight motion artefact),0
+265,NYU,0050983,1,,0
+266,NYU,0050984,-1,hi grads in left v1 and temp),0
+267,NYU,0050985,-1,hi grads),0
+268,NYU,0050986,1,,0
+269,NYU,0050987,-1,bad surface due to poor img quality),0
+270,NYU,0050988,-1,hi grad and distor),0
+271,NYU,0050990,1,,0
+272,NYU,0050993,1,,0
+273,NYU,0050994,-1,hi grad due to poor img qual),0
+274,NYU,0050995,-1,hi grad),0
+275,NYU,0050996,1,,0
+276,NYU,0050997,1,,0
+277,NYU,0050998,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+278,NYU,0050999,-1,hi grad in temporal areas),2
+279,NYU,0051000,-1,hi grad in left temp and right v1),0
+280,NYU,0051001,1,,0
+281,NYU,0051002,1,,2
+282,NYU,0051003,0,overlooked motion artefact),0
+283,NYU,0051006,1,some hi grad in temporal sulci but generally ok),0
+284,NYU,0051007,1,,0
+285,NYU,0051008,-1,overlooked motion artefact),0
+286,NYU,0051009,1,but not best image quality),0
+287,NYU,0051010,-1,motion/bad img quality),0
+288,NYU,0051011,0,lots of ringing),0
+289,NYU,0051012,-1,still ringing),0
+290,NYU,0051013,-1,hi grad in parietal and some ringing),0
+291,NYU,0051014,1,image qual is not perfect tho),0
+292,NYU,0051015,-1,hi grad in v1 and poor img qual),0
+293,NYU,0051016,1,image has some sort of a ghosting tho which doesnt affect surfs),0
+294,NYU,0051017,-1,hi grad and poor img qual),0
+295,NYU,0051018,1,,0
+296,NYU,0051019,-1,hi grad in s1),0
+297,NYU,0051020,-1,hi grad and poor img quality),0
+298,NYU,0051021,-1,very high v1 grad),0
+299,NYU,0051023,1,,0
+300,NYU,0051024,1,,0
+301,NYU,0051025,-1,hi grad in bilat v1 and surf shape strange),0
+302,NYU,0051026,-1,hi grad and poor img qual with some motion artfcts),0
+303,NYU,0051027,-1,hi grad and jagged surf),0
+304,NYU,0051028,-1,hi grad and poor img),0
+305,NYU,0051029,-1,hi grad in temp sulcus and motion),0
+306,NYU,0051030,-1,ringing again),0
+307,NYU,0051032,1,,0
+308,NYU,0051033,0,bad ringing),0
+309,NYU,0051034,-1,ringing),0
+310,NYU,0051035,-1,hi grad and poor img qual),0
+311,NYU,0051036,1,,0
+312,NYU,0051038,1,,0
+313,NYU,0051039,1,,0
+314,NYU,0051040,-1,hi grad and ringing),0
+315,NYU,0051041,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+316,NYU,0051042,-1,same ringing and hi grad),0
+317,NYU,0051044,-1,ringing and hi grad),0
+318,NYU,0051045,-1,ringing and hi grad in right v1),0
+319,NYU,0051046,-1,hi grad bad qual img),0
+320,NYU,0051047,1,,0
+321,NYU,0051048,-1,hi grad in v1 and ringing),0
+322,NYU,0051049,-1,hi grad in sm strip),0
+323,NYU,0051050,1,,0
+324,NYU,0051051,1,,0
+325,NYU,0051052,1,,0
+326,NYU,0051053,-1,hi grad and ringing),0
+327,NYU,0051055,-1,hi grad in some sulci and so-so img qual),0
+328,NYU,0051056,-1,hi grad in poles and so-so img qual),0
+329,NYU,0051057,1,,0
+330,NYU,0051058,1,,0
+331,NYU,0051059,-1,hi grad in vis and sm strip),0
+332,NYU,0051060,-1,hi grad and jagged and asym surf),0
+333,NYU,0051061,-1,hi grad in right sm),0
+334,NYU,0051062,-1,hi grad in sm),0
+335,NYU,0051063,-1,hi grad in vis),0
+336,NYU,0051064,1,,0
+337,NYU,0051065,1,,0
+338,NYU,0051066,1,,0
+339,NYU,0051067,-1,really hi grad in vis),0
+340,NYU,0051068,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+341,NYU,0051069,1,,0
+342,NYU,0051070,1,,0
+343,NYU,0051072,-1,hi grad poor img qual),0
+344,NYU,0051073,-1,hi grad in right sm v1 jagged),0
+345,NYU,0051074,1,,0
+346,NYU,0051075,1,,0
+347,NYU,0051076,-1,hi grad and ringing),0
+348,NYU,0051077,-1,vas hi grad in v1 sm and temp),0
+349,NYU,0051078,1,,0
+350,NYU,0051079,1,,0
+351,NYU,0051080,1,,2
+352,NYU,0051082,-1,hi grad in v1 and tpol),0
+353,NYU,0051083,-1,hi grads and jagged surfs),0
+354,NYU,0051084,1,,0
+355,NYU,0051085,1,,0
+356,NYU,0051086,1,,0
+357,NYU,0051087,1,hi grad and ringing),0
+358,NYU,0051088,1,,0
+359,NYU,0051089,1,,0
+360,NYU,0051090,-1,right parietal jump to skull),0
+361,NYU,0051091,1,,0
+362,NYU,0051093,-1,ringing and hi grad),0
+363,NYU,0051094,1,,0
+364,NYU,0051095,-1,ringing and hi grad),0
+365,NYU,0051096,1,,0
+366,NYU,0051098,-1,ringing and hi grad),0
+367,NYU,0051100,-1,hi grad and jaggedness),0
+368,NYU,0051101,1,,0
+369,NYU,0051102,-1,ringing and hi grad),0
+370,NYU,0051103,1,,0
+371,NYU,0051104,1,,0
+372,NYU,0051105,1,,0
+373,NYU,0051106,-1,ringing and grad),0
+374,NYU,0051107,-1,hi grad and ringing),0
+375,NYU,0051108,1,,0
+376,NYU,0051109,-1,ringing and hi grad),0
+377,NYU,0051110,1,,0
+378,NYU,0051111,1,,0
+379,NYU,0051112,-1,hi grad and a bit of ringing),0
+380,NYU,0051113,-1,hi grad esp in v1 and ringing),0
+381,NYU,0051115,-1,high occipital asymmetry resulting in misaligned atlas regions),0
+382,NYU,0051116,-1,hi grad and jagged surf),0
+383,NYU,0051117,-1,hi grad and asym),0
+384,NYU,0051118,-1,hi grad and weird surf shape),0
+385,NYU,0051119,-1,hi grad in occip and strange surf shape),0
+386,NYU,0051120,1,,0
+387,NYU,0051121,-1,hi grad and asym),0
+388,NYU,0051122,1,,0
+389,NYU,0051123,-1,severely asymmetric brain),0
+390,NYU,0051124,1,,0
+391,NYU,0051125,-1,hi grad in sm strip),0
+392,NYU,0051126,-1,hi grad in sm trip),0
+393,NYU,0051127,-1,hi grad in v1),0
+394,NYU,0051128,-1,hi grad in sm and surf jumps),0
+395,NYU,0051129,1,,0
+396,NYU,0051130,-1,hi grad in v1),0
+397,NYU,0051131,-1,hi grad in v1),0
+398,NYU,0051146,-1,hi grad in sm),0
+399,NYU,0051147,-1,hi grad and surf irregularities),0
+400,NYU,0051148,-1,hi grad in sm),0
+401,NYU,0051149,-1,hi grad and ringing),0
+402,NYU,0051150,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+403,NYU,0051151,-1,hi grad in left v1 and bad surf),0
+404,NYU,0051152,-1,hi grad and ringing),0
+405,NYU,0051153,-1,broad hi grad in right v1 and some sm),0
+406,NYU,0051154,-1,left v1 hi grad and surf irreguls),0
+407,NYU,0051155,-1,poor img qual with ringing and large parietal skull jumps),0
+408,NYU,0051156,-1,hi grad in sm),0
+409,NYU,0051159,-1,hi grad in sm and v1 and bad surf),0
+410,OHSU,0050142,-1,hi grad in tpoles),0
+411,OHSU,0050143,-1,hi grad in pfc and strange surfs),0
+412,OHSU,0050144,-1,hi grad in pfcm and temp),0
+413,OHSU,0050145,-1,hi grad in tpol),0
+414,OHSU,0050146,-1,hi grad in pfc and tpol),0
+415,OHSU,0050147,1,,0
+416,OHSU,0050148,-1,some hi grad and slightly irreg surf),0
+417,OHSU,0050149,-1,hi grad in pfcorb and tpol),0
+418,OHSU,0050150,-1,hi grad mosly in pfc and parietal jumps),0
+419,OHSU,0050152,1,,0
+420,OHSU,0050153,-1,parietal skull jumps),0
+421,OHSU,0050155,-1,broad hi grad in pfc),0
+422,OHSU,0050156,-1,broad hi grad in pfc and temp),0
+423,OHSU,0050157,-1,hi grad mostly in pfc),0
+424,OHSU,0050158,-1,hi grad and jagged surf),0
+425,OHSU,0050159,-1,hi grad and ringing),0
+426,OHSU,0050160,-1,hi grad in pfc),0
+427,OHSU,0050161,1,,0
+428,OHSU,0050162,-1,some hi grad in pfcorb and tpol),0
+429,OHSU,0050164,-1,hi grad and jagged surfs),0
+430,OHSU,0050165,-1,broader hi grad in pfc and temp),0
+431,OHSU,0050166,-1,bad ringing and hi grads),0
+432,OHSU,0050167,-1,hi grads),0
+433,OHSU,0050168,-1,hi grad and jagged surf),0
+434,OHSU,0050169,-1,hi grad and bad surfs),0
+435,OHSU,0050171,0,hi grad and really jagged surf),0
+436,Olin,0050102,0,hi grad and really jagged surf with parietal skull jumps),0
+437,Olin,0050103,0,hi grad and jaggedness),0
+438,Olin,0050104,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+439,Olin,0050105,-1,ringing and ghosting),0
+440,Olin,0050106,-1,hi grad in v1 and temp),0
+441,Olin,0050107,-1,hi grad in bilat v1),0
+442,Olin,0050108,-1,hi grad esp in sm),0
+443,Olin,0050109,-1,hi grad and jagged surf),0
+444,Olin,0050110,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+445,Olin,0050111,-1,hi grad and bad surf),0
+446,Olin,0050112,-1,hi grad and bad surf again),0
+447,Olin,0050113,-1,hi grads in occip),0
+448,Olin,0050114,-1,hi grad in sm and pfcorb),0
+449,Olin,0050115,-1,hi grad in sm and pfcorb),0
+450,Olin,0050116,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+451,Olin,0050117,-1,hi grad and jagged surf),0
+452,Olin,0050118,-1,broad hi grad in temporal),0
+453,Olin,0050119,-1,hi grad in pfc),0
+454,Olin,0050123,-1,hi grad and jagged surf),0
+455,Olin,0050124,1,,0
+456,Olin,0050125,-+1,hi grad in right sm just a bit),0
+457,Olin,0050126,0,hi grad and bad surf),0
+458,Olin,0050127,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+459,Olin,0050128,-1,hi grad and some ghosting),0
+460,Olin,0050130,-+1,hi grad in a bit of sm and some ringing),0
+461,Olin,0050131,-1,similar to previous but a bit broader),0
+462,Olin,0050132,-1,left v1 hi grad),0
+463,Olin,0050133,0,really bad qual image),0
+464,Olin,0050134,1,,0
+465,Olin,0050135,-1,hi grad and jagged surf),0
+466,Pitt,0050002,-1,hi grad),0
+467,Pitt,0050003,-1,even more hi grad and worse surf),0
+468,Pitt,0050004,-1,hi grad),0
+469,Pitt,0050005,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+470,Pitt,0050006,-1,hi grad),0
+471,Pitt,0050007,-1,hi grad and jagged surf),0
+472,Pitt,0050008,-1,hi grad),0
+473,Pitt,0050009,0,hi grad and rather large parietal skull jumps),0
+474,Pitt,0050010,0,hi grad and bad surf),0
+475,Pitt,0050011,-1,hi grad and bad surf),0
+476,Pitt,0050012,-1,broad hi grad),0
+477,Pitt,0050013,-1,hi grad and jagged surf),0
+478,Pitt,0050014,-1,bad surf and hi grad esp in tpol),0
+479,Pitt,0050015,-1,jaggedness and hi grad),0
+480,Pitt,0050016,-1,hi grad and asymmetry),0
+481,Pitt,0050017,0,very bad surf),0
+482,Pitt,0050019,-1,hi grad and bad surf),0
+483,Pitt,0050020,-1,hi grad and ringing and bad surf),0
+484,Pitt,0050022,-1,hi grad in tpol),0
+485,Pitt,0050023,-1,hi grad and strange surf),0
+486,Pitt,0050024,-1,hi grad in tpol and pfcorb),0
+487,Pitt,0050025,-1,broad hi grads),0
+488,Pitt,0050026,-1,broad hi grads),0
+489,Pitt,0050027,-+1,slightly better but still hi grad in ventral structures),0
+490,Pitt,0050028,-1,hi grad and jaggedness),0
+491,Pitt,0050029,-1,hi grad and some badness in surf sulci),0
+492,Pitt,0050030,-1,hi grad in ventral structures),0
+493,Pitt,0050031,-1,hi grad in sm and v1),0
+494,Pitt,0050032,-1,grad and surf),0
+495,Pitt,0050033,-1,,0
+496,Pitt,0050034,-1,,0
+497,Pitt,0050035,-1,,0
+498,Pitt,0050036,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+499,Pitt,0050037,-1,,0
+500,Pitt,0050038,-1,,0
+501,Pitt,0050039,-1,,0
+502,Pitt,0050040,-1,,0
+503,Pitt,0050041,-1,,0
+504,Pitt,0050042,-1,,0
+505,Pitt,0050044,-1,,0
+506,Pitt,0050045,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+507,Pitt,0050046,-1,,0
+508,Pitt,0050047,-+1,slightly better),0
+509,Pitt,0050048,-1,,0
+510,Pitt,0050049,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+511,Pitt,0050050,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+512,Pitt,0050051,-1,,0
+513,Pitt,0050052,-1,,0
+514,Pitt,0050054,-1,,0
+515,Pitt,0050055,-1,,0
+516,Pitt,0050056,-1,,0
+517,Pitt,0050057,-1,,0
+518,Pitt,0050058,-1,,0
+519,Pitt,0050059,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+520,Pitt,0050060,-1,,0
+521,SBL,0051558,-1,,2
+522,SBL,0051559,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+523,SBL,0051560,-1,BROAD hi grad),0
+524,SBL,0051561,-1,,0
+525,SBL,0051562,-1,,0
+526,SBL,0051563,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+527,SBL,0051564,-1,,0
+528,SBL,0051565,-1,,0
+529,SBL,0051566,-1,,2
+530,SBL,0051567,-1,very low contrast images in this site),0
+531,SBL,0051568,-1,,0
+532,SBL,0051569,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+533,SBL,0051570,-1,,0
+534,SBL,0051571,-1,,0
+535,SBL,0051572,-1,,2
+536,SBL,0051573,-1,,0
+537,SBL,0051574,-1,,0
+538,SBL,0051575,-1,,0
+539,SBL,0051576,-1,,0
+540,SBL,0051577,-1,,0
+541,SBL,0051578,-1,,0
+542,SBL,0051579,-1,,2
+543,SBL,0051580,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+544,SBL,0051581,-1,,0
+545,SBL,0051582,-1,,0
+546,SBL,0051583,-1,,0
+547,SBL,0051584,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+548,SBL,0051585,-1,,0
+549,SDSU,0050183,1,,0
+550,SDSU,0050184,-1,hi grad and jagged surf),0
+551,SDSU,0050186,-1,hi grad and bad surf),0
+552,SDSU,0050187,-1,hi grad in v1 and sm and jagged surf),0
+553,SDSU,0050188,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+554,SDSU,0050189,0,hi grad and bad surf),0
+555,SDSU,0050190,0,hi grad and bad surf),0
+556,SDSU,0050192,0,hi grad and horrible surf due to severe motion artef),0
+557,SDSU,0050193,-+1,hi grad in a bit of right v1 and some ringing),0
+558,SDSU,0050194,-+1,same),0
+559,SDSU,0050195,-1,worse hi grad),0
+560,SDSU,0050196,-+1,bits of hi grad in v1 and sm),0
+561,SDSU,0050198,-1,hi grad and asymm),0
+562,SDSU,0050199,1,,0
+563,SDSU,0050200,-1,hi grad and jagged),0
+564,SDSU,0050201,0,hi grad and very jagged bad ringing),0
+565,SDSU,0050202,-+1,some hi grad in pfc and rather jagged surf),0
+566,SDSU,0050203,-1,hi grad and jagged),0
+567,SDSU,0050204,-1,broad hi grad),0
+568,SDSU,0050205,-1,hi grad in v1 and sm and some pfc),0
+569,SDSU,0050206,-1,hi grad and jagged surf),0
+570,SDSU,0050207,-1,hi grad and jagged surf due to ringing),0
+571,SDSU,0050208,-1,same),0
+572,SDSU,0050209,-1,,0
+573,SDSU,0050210,-1,,0
+574,SDSU,0050213,-+1,jaggedness and parietal dura jumps),0
+575,SDSU,0050214,-+1,a bit of hi grad in right v1),0
+576,SDSU,0050215,-+1,tiny bits of hi grad in sm),0
+577,Stanford,0051161,0,pretty severe hi grad and jaggedness),0
+578,Stanford,0051162,0,same due to ringing),0
+579,Stanford,0051163,-1,a bit better but still broad hi grad),0
+580,Stanford,0051164,0,,0
+581,Stanford,0051165,0,,0
+582,Stanford,0051166,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+583,Stanford,0051167,0,hi grad and jaggedness),0
+584,Stanford,0051168,-1,more or less the same),0
+585,Stanford,0051169,-1,,0
+586,Stanford,0051170,0,,0
+587,Stanford,0051171,0,,0
+588,Stanford,0051172,0,,0
+589,Stanford,0051173,0,,0
+590,Stanford,0051177,0,,0
+591,Stanford,0051178,0,,0
+592,Stanford,0051179,0,,2
+593,Stanford,0051180,-1,,0
+594,Stanford,0051181,0,,0
+595,Stanford,0051182,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),2
+596,Stanford,0051183,0,,2
+597,Stanford,0051184,0,,0
+598,Stanford,0051185,0,,3
+599,Stanford,0051187,0,,0
+600,Stanford,0051188,-1,,0
+601,Stanford,0051189,0,,0
+602,Stanford,0051190,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+603,Stanford,0051191,0,,2
+604,Stanford,0051192,0,,0
+605,Stanford,0051193,0,,0
+606,Stanford,0051194,-1,,0
+607,Stanford,0051195,0,,2
+608,Stanford,0051196,0,,0
+609,Stanford,0051197,0,,0
+610,Stanford,0051198,0,,0
+611,Trinity,0050232,0,,0
+612,Trinity,0050233,-+1,a bit of hi grad in insulae and some pfcorb),0
+613,Trinity,0050234,-+1,a bit of hi grad in left tpol),0
+614,Trinity,0050235,1,,0
+615,Trinity,0050236,-1,hi grad in v1 and sm),0
+616,Trinity,0050237,-1,hi grad esp in tpol and pfcorb),0
+617,Trinity,0050238,1,,0
+618,Trinity,0050239,-1,some hi grad in left occip and bit of sm),0
+619,Trinity,0050240,-+1,small hi grad in left pfcorb),0
+620,Trinity,0050241,-+1,now right pfcorb and a bit of left occip),0
+621,Trinity,0050242,0,hi grad and jaggedness due to ringing),0
+622,Trinity,0050243,-+1,tiny hi grad in left sm),0
+623,Trinity,0050244,-1,hi grad esp in temp),0
+624,Trinity,0050245,-+1,small hi grad areas in tc and pfc poles),0
+625,Trinity,0050246,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+626,Trinity,0050247,1,,0
+627,Trinity,0050248,-1,jagged surf poor cntrst and ringing),0
+628,Trinity,0050249,-1,ringing and some hi grads),0
+629,Trinity,0050250,1,,0
+630,Trinity,0050251,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+631,Trinity,0050252,-1,some hi grads jaggedness and asymm),0
+632,Trinity,0050253,1,,0
+633,Trinity,0050254,-+1,hi grad in pfc and some jaggedness),0
+634,Trinity,0050255,-+1,low cntrst img resulted in somewhat suboptimal surf),0
+635,Trinity,0050257,-1,asymmetry jaggedness and parietal jumps),0
+636,Trinity,0050259,-+1,small bits of hi grad in sm and tpol),0
+637,Trinity,0050260,-1,broad hi grad and worse surf),0
+638,Trinity,0050261,1,,0
+639,Trinity,0050262,-1,left occip hi grad),0
+640,Trinity,0050263,-1,right occip and right temp hi grad),0
+641,Trinity,0050264,-1,right tc and left pfcorb hi grad),0
+642,Trinity,0050265,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+643,Trinity,0050266,-+1,just very small bit of hi grad in pfc orb),0
+644,Trinity,0050267,-1,hi grads esp in pfcorb and tpol),0
+645,Trinity,0050268,-1,some hi grads in sm),0
+646,Trinity,0050269,-+1,some hi grad in insula),0
+647,Trinity,0050270,-1,hi grad and jaggedness),0
+648,Trinity,0050271,-+1,small hi grad in v1),0
+649,Trinity,0051132,-+1,same),0
+650,Trinity,0051133,1,,0
+651,Trinity,0051134,-+1,just some tiny hi grads in pfcorb),0
+652,Trinity,0051135,-+1,same),0
+653,Trinity,0051136,-1,higher grad due to low cntrst img with rather severe ringing),0
+654,Trinity,0051137,-1,exact same problem),0
+655,Trinity,0051138,-1,better img but still a bit too much hi grad in insula pfcorb and some sm),0
+656,Trinity,0051139,-1,some hi grads of strange origin since img qual is good also bits of altas misalignment around calcarine),0
+657,Trinity,0051140,-+1,just a tiny sm hi grad),0
+658,Trinity,0051141,-1,hi grad in left pfcpole and left acc),0
+659,Trinity,0051142,-+1,bits of hi grad possibly due to low cntrst img),0
+660,UCLA_1,0051201,0,pretty severe ringing),0
+661,UCLA_1,0051202,-1,sulcal hi grad in pfc possibly due to wrong tlink given rather low img qual),0
+662,UCLA_1,0051203,-1,same),0
+663,UCLA_1,0051204,-1,,0
+664,UCLA_1,0051205,-1,,0
+665,UCLA_1,0051206,-+1,quite a bit better),0
+666,UCLA_1,0051207,-1,,0
+667,UCLA_1,0051208,-+1,,0
+668,UCLA_1,0051209,0,severe motion artefacts),0
+669,UCLA_1,0051210,-1,hi grad and atlas misalighment),0
+670,UCLA_1,0051211,0,bad surf due to motion),2
+671,UCLA_1,0051212,-1,hi grads and bad surf),0
+672,UCLA_1,0051214,-1,,0
+673,UCLA_1,0051215,-1,,0
+674,UCLA_1,0051216,-1,,0
+675,UCLA_1,0051217,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+676,UCLA_1,0051218,-1,,0
+677,UCLA_1,0051219,-1,,0
+678,UCLA_1,0051220,-1,,2
+679,UCLA_1,0051221,-1,,0
+680,UCLA_1,0051222,-1,,0
+681,UCLA_1,0051223,-1,,0
+682,UCLA_1,0051224,-1,,0
+683,UCLA_1,0051225,-1,,0
+684,UCLA_1,0051226,-1,,0
+685,UCLA_1,0051227,-1,,0
+686,UCLA_1,0051228,-1,,0
+687,UCLA_1,0051229,-+1,,0
+688,UCLA_1,0051230,-+1,,0
+689,UCLA_1,0051231,1,,0
+690,UCLA_1,0051234,-1,hi grads due to some pretty bad ringing),0
+691,UCLA_1,0051235,-1,pretty vast hi grads and asymmetry in temp),0
+692,UCLA_1,0051236,-1,looks like there is a hole in the skull which does not affect surfaces nevertheless),0
+693,UCLA_1,0051237,-+1,some hi grad in right pfc),0
+694,UCLA_1,0051238,0,bad img),0
+695,UCLA_1,0051239,-1,jagged and hi grad),0
+696,UCLA_1,0051240,-1,,0
+697,UCLA_1,0051241,-+1,,0
+698,UCLA_1,0051248,-1,,0
+699,UCLA_1,0051249,1,,0
+700,UCLA_1,0051250,-+1,a bit jagged and tiny hi grad),0
+701,UCLA_1,0051251,-+1,,0
+702,UCLA_1,0051252,1,,0
+703,UCLA_1,0051253,1,,0
+704,UCLA_1,0051254,-1,,0
+705,UCLA_1,0051255,-+1,,0
+706,UCLA_1,0051256,-+1,,0
+707,UCLA_1,0051257,-+1,,0
+708,UCLA_1,0051258,-1,,0
+709,UCLA_1,0051259,-1,,0
+710,UCLA_1,0051260,-1,,0
+711,UCLA_1,0051261,-1,,0
+712,UCLA_1,0051262,-1,,0
+713,UCLA_1,0051263,0,cutoff at pfc),0
+714,UCLA_1,0051264,-1,,0
+715,UCLA_1,0051265,-1,,0
+716,UCLA_1,0051266,-1,,0
+717,UCLA_1,0051267,-1,,0
+718,UCLA_1,0051268,-1,,0
+719,UCLA_1,0051269,-+1,,0
+720,UCLA_1,0051271,-1,,0
+721,UCLA_1,0051272,-1,,0
+722,UCLA_1,0051273,-+1,,0
+723,UCLA_1,0051274,0,ringing),0
+724,UCLA_1,0051275,-1,,0
+725,UCLA_1,0051276,-1,,0
+726,UCLA_1,0051277,-1,,0
+727,UCLA_1,0051278,-1,,0
+728,UCLA_1,0051279,-1,,0
+729,UCLA_1,0051280,-1,,0
+730,UCLA_1,0051281,-1,,0
+731,UCLA_1,0051282,-1,,0
+732,UCLA_2,0051291,-1,,0
+733,UCLA_2,0051292,0,,0
+734,UCLA_2,0051293,-1,,0
+735,UCLA_2,0051294,-+1,,0
+736,UCLA_2,0051295,-1,,0
+737,UCLA_2,0051297,-1,,0
+738,UCLA_2,0051298,-1,,0
+739,UCLA_2,0051299,-1,,0
+740,UCLA_2,0051300,-1,,0
+741,UCLA_2,0051301,-1,,0
+742,UCLA_2,0051302,0,,0
+743,UCLA_2,0051303,-1,,0
+744,UCLA_2,0051304,-1,,0
+745,UCLA_2,0051305,0,,0
+746,UCLA_2,0051306,-+1,,0
+747,UCLA_2,0051307,-1,,0
+748,UCLA_2,0051308,-1,,0
+749,UCLA_2,0051309,-1,,0
+750,UCLA_2,0051311,-+1,,0
+751,UCLA_2,0051313,-1,,0
+752,UCLA_2,0051314,0,,0
+753,UCLA_2,0051315,-1,,0
+754,UCLA_2,0051316,0,,0
+755,UCLA_2,0051317,0,,0
+756,UM_1,0050273,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+757,UM_1,0050274,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),2
+758,UM_1,0050275,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+759,UM_1,0050279,0,super low contrast and ringing),0
+760,UM_1,0050280,-1,still bad hi grad),0
+761,UM_1,0050282,-1,,0
+762,UM_1,0050284,-1,,0
+763,UM_1,0050285,-1,,0
+764,UM_1,0050286,-1,,0
+765,UM_1,0050287,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+766,UM_1,0050289,-1,,0
+767,UM_1,0050290,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),2
+768,UM_1,0050291,-1,,0
+769,UM_1,0050292,-1,,0
+770,UM_1,0050293,-1,,0
+771,UM_1,0050294,-1,,0
+772,UM_1,0050295,-1,,0
+773,UM_1,0050297,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+774,UM_1,0050298,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+775,UM_1,0050299,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+776,UM_1,0050300,0,,0
+777,UM_1,0050301,-1,,0
+778,UM_1,0050302,0,,0
+779,UM_1,0050304,0,,0
+780,UM_1,0050306,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+781,UM_1,0050307,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+782,UM_1,0050308,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+783,UM_1,0050310,-1,grad is better but surf is bad due to persistently low img qual),0
+784,UM_1,0050311,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+785,UM_1,0050312,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+786,UM_1,0050314,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+787,UM_1,0050315,-1,,0
+788,UM_1,0050316,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+789,UM_1,0050318,0,,0
+790,UM_1,0050319,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+791,UM_1,0050320,0,,0
+792,UM_1,0050321,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+793,UM_1,0050322,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+794,UM_1,0050324,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+795,UM_1,0050325,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+796,UM_1,0050326,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),2
+797,UM_1,0050327,-1,,0
+798,UM_1,0050328,-1,,0
+799,UM_1,0050329,-1,,0
+800,UM_1,0050330,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+801,UM_1,0050331,-1,,0
+802,UM_1,0050332,-1,,0
+803,UM_1,0050333,-1,,0
+804,UM_1,0050334,-1,,0
+805,UM_1,0050335,-1,,0
+806,UM_1,0050336,-1,,0
+807,UM_1,0050337,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+808,UM_1,0050338,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+809,UM_1,0050339,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+810,UM_1,0050340,-1,,0
+811,UM_1,0050341,-1,,0
+812,UM_1,0050342,-1,,0
+813,UM_1,0050343,-1,,0
+814,UM_1,0050344,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+815,UM_1,0050345,0,,2
+816,UM_1,0050346,-1,,0
+817,UM_1,0050347,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+818,UM_1,0050348,-1,,0
+819,UM_1,0050349,-1,,0
+820,UM_1,0050350,0,,0
+821,UM_1,0050351,0,,0
+822,UM_1,0050352,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+823,UM_1,0050353,0,,0
+824,UM_1,0050354,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+825,UM_1,0050355,-1,,0
+826,UM_1,0050356,-1,,0
+827,UM_1,0050357,-1,,0
+828,UM_1,0050358,-1,,0
+829,UM_1,0050359,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+830,UM_1,0050360,-1,,0
+831,UM_1,0050361,-1,,0
+832,UM_1,0050362,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+833,UM_1,0050363,0,,0
+834,UM_1,0050364,0,,0
+835,UM_1,0050365,-1,,0
+836,UM_1,0050366,0,,0
+837,UM_1,0050367,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+838,UM_1,0050368,0,,0
+839,UM_1,0050369,0,,0
+840,UM_1,0050370,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+841,UM_1,0050372,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+842,UM_1,0050373,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+843,UM_1,0050374,-1,,0
+844,UM_1,0050375,-1,,0
+845,UM_1,0050376,0,,0
+846,UM_1,0050377,-1,,0
+847,UM_1,0050378,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+848,UM_1,0050379,-1,,0
+849,UM_1,0050380,-1,,0
+850,UM_1,0050381,0,,0
+851,UM_2,0050382,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+852,UM_2,0050385,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+853,UM_2,0050386,-1,,0
+854,UM_2,0050387,0,,0
+855,UM_2,0050388,-1,,0
+856,UM_2,0050390,-1,,0
+857,UM_2,0050391,-1,,0
+858,UM_2,0050397,-1,,0
+859,UM_2,0050399,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+860,UM_2,0050402,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+861,UM_2,0050404,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+862,UM_2,0050405,0,,0
+863,UM_2,0050406,0,,0
+864,UM_2,0050407,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+865,UM_2,0050408,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+866,UM_2,0050410,0,,0
+867,UM_2,0050413,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+868,UM_2,0050414,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+869,UM_2,0050416,0,,0
+870,UM_2,0050417,0,,0
+871,UM_2,0050419,0,,0
+872,UM_2,0050421,0,,0
+873,UM_2,0050422,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+874,UM_2,0050424,-1,,0
+875,UM_2,0050425,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+876,UM_2,0050426,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+877,UM_2,0050427,0,,0
+878,UM_2,0050428,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+879,USM,0050432,-1,,0
+880,USM,0050433,-1,hi grad in right pfc sulci possibly due to low img qual and even some ringing),0
+881,USM,0050434,-+1,still right pfc issue but a bit better),0
+882,USM,0050435,-1,,0
+883,USM,0050436,-1,,0
+884,USM,0050437,-+1,,0
+885,USM,0050438,-1,,0
+886,USM,0050439,-+1,,0
+887,USM,0050440,-+1,,0
+888,USM,0050441,-1,,0
+889,USM,0050442,-1,,0
+890,USM,0050443,-1,,0
+891,USM,0050444,-1,,0
+892,USM,0050445,-1,,0
+893,USM,0050446,-1,,0
+894,USM,0050447,0,,0
+895,USM,0050448,-+1,,0
+896,USM,0050449,-1,,0
+897,USM,0050450,-+1,,0
+898,USM,0050451,-1,,0
+899,USM,0050452,-1,,0
+900,USM,0050453,-1,,0
+901,USM,0050454,-1,,0
+902,USM,0050455,-1,,0
+903,USM,0050456,-1,,0
+904,USM,0050457,-1,,0
+905,USM,0050458,-1,,0
+906,USM,0050459,-1,,0
+907,USM,0050460,-+1,,0
+908,USM,0050461,-1,,0
+909,USM,0050462,-1,,0
+910,USM,0050463,0,,0
+911,USM,0050464,-1,,0
+912,USM,0050465,-1,,0
+913,USM,0050466,-1,,0
+914,USM,0050467,-1,,0
+915,USM,0050468,-1,,0
+916,USM,0050469,-1,,0
+917,USM,0050470,-1,,0
+918,USM,0050471,-1,,0
+919,USM,0050472,-1,,0
+920,USM,0050473,-+1,,0
+921,USM,0050474,-1,,0
+922,USM,0050475,-1,,0
+923,USM,0050476,0,,0
+924,USM,0050477,-1,,0
+925,USM,0050478,-1,,0
+926,USM,0050479,-1,,0
+927,USM,0050480,-1,,0
+928,USM,0050481,-1,,0
+929,USM,0050482,-1,,0
+930,USM,0050483,-1,,0
+931,USM,0050484,-1,,0
+932,USM,0050485,-1,,0
+933,USM,0050486,-1,,0
+934,USM,0050487,0,,0
+935,USM,0050488,-1,,0
+936,USM,0050489,0,,0
+937,USM,0050490,0,,0
+938,USM,0050491,-1,,0
+939,USM,0050492,-1,,0
+940,USM,0050493,-1,,0
+941,USM,0050494,-1,,0
+942,USM,0050495,-1,,0
+943,USM,0050496,-1,,0
+944,USM,0050497,-1,,0
+945,USM,0050498,-1,,0
+946,USM,0050499,-1,,0
+947,USM,0050500,-+1,,0
+948,USM,0050501,-1,,0
+949,USM,0050502,-1,,0
+950,USM,0050503,-1,,0
+951,USM,0050504,-1,,0
+952,USM,0050505,-1,,0
+953,USM,0050507,-1,,2
+954,USM,0050508,0,,0
+955,USM,0050509,0,,0
+956,USM,0050510,-1,,0
+957,USM,0050511,0,,0
+958,USM,0050512,-1,,0
+959,USM,0050514,-+1,,0
+960,USM,0050515,-1,,0
+961,USM,0050516,-1,,0
+962,USM,0050517,-1,,0
+963,USM,0050518,-1,,0
+964,USM,0050519,-1,,0
+965,USM,0050520,-1,,0
+966,USM,0050521,-1,,0
+967,USM,0050522,-1,,0
+968,USM,0050523,-1,,0
+969,USM,0050525,-1,,0
+970,USM,0050526,-1,,0
+971,USM,0050527,-1,,0
+972,USM,0050528,-1,,0
+973,USM,0050529,-1,,0
+974,USM,0050530,-1,,0
+975,USM,0050531,0,,0
+976,USM,0050532,0,,0
+977,Yale,0050551,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+978,Yale,0050552,0,,0
+979,Yale,0050553,0,,0
+980,Yale,0050554,0,,0
+981,Yale,0050555,-1,,0
+982,Yale,0050556,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+983,Yale,0050557,0,,0
+984,Yale,0050558,-1,,0
+985,Yale,0050559,0,,0
+986,Yale,0050560,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+987,Yale,0050561,0,,0
+988,Yale,0050562,0,,0
+989,Yale,0050563,0,,0
+990,Yale,0050564,0,,0
+991,Yale,0050565,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+992,Yale,0050566,0,,0
+993,Yale,0050567,0,,0
+994,Yale,0050568,0,,0
+995,Yale,0050569,-1,,0
+996,Yale,0050570,0,,0
+997,Yale,0050571,0,,0
+998,Yale,0050572,0,,0
+999,Yale,0050573,0,,0
+1000,Yale,0050574,0,,0
+1001,Yale,0050575,0,,0
+1002,Yale,0050576,0,,0
+1003,Yale,0050577,0,,0
+1004,Yale,0050578,0,,0
+1005,Yale,0050601,-1,,0
+1006,Yale,0050602,0,,0
+1007,Yale,0050603,-1,,0
+1008,Yale,0050606,-1,,0
+1009,Yale,0050607,-1,,0
+1010,Yale,0050608,-1,,0
+1011,Yale,0050609,0,,0
+1012,Yale,0050610,0,,0
+1013,Yale,0050611,0,,0
+1014,Yale,0050612,0,,0
+1015,Yale,0050613,-1,,0
+1016,Yale,0050614,0,,0
+1017,Yale,0050615,0,,0
+1018,Yale,0050616,0,,0
+1019,Yale,0050617,0,,0
+1020,Yale,0050618,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),2
+1021,Yale,0050619,-1,,0
+1022,Yale,0050620,-1,,0
+1023,Yale,0050621,-1,,0
+1024,Yale,0050622,0,,0
+1025,Yale,0050623,-1,,0
+1026,Yale,0050624,-1,,0
+1027,Yale,0050625,-1,NO IMAGES AVAILABLE FOR THIS SCAN!),0
+1028,Yale,0050626,-1,,0
+1029,Yale,0050627,-1,,0
+1030,Yale,0050628,-1,,0
