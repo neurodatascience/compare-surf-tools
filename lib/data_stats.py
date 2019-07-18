@@ -15,6 +15,7 @@ from scipy.stats import pearsonr
 import scipy.cluster.hierarchy as sch
 import collections
 from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.metrics import mean_squared_error
 
 # Simple correlations of features
 def cross_correlations(df1,df2,subject_ID_col):
@@ -72,7 +73,7 @@ def generate_pairwise_membership(df,m_col):
 
     
 # ML model perfs
-def computeSoftwareMLModels(df,data_label,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits=10,n_repeats=10,n_jobs=1):
+def computeSoftwareMLModels(df,data_label,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,group_col,model_type,ml_model,rank_features=False,compute_null=False,n_splits=10,n_repeats=10,n_jobs=1):
     """ Compares performance of different software outputs for a given ML Model
         Calls getMLModelPerf to get individual model performances
     """
@@ -80,20 +81,37 @@ def computeSoftwareMLModels(df,data_label,roi_cols,covar_continuous_cols,covar_c
     print('Running ML classifer on {} {}'.format(len(software_list),data_label))
     scores_concat_df = pd.DataFrame()
     feature_rank_concat_df = pd.DataFrame()
+    external_scores_concat_df = pd.DataFrame()
+
     perf_pval_dict = {}
     for pipe in software_list:
         ml_df = df[df[data_label]==pipe]
         print('{} {}'.format(data_label, pipe))
-        scores_df, null_df, pvalue, feature_rank_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits,n_repeats,n_jobs)    
-        scores_df[data_label] = np.tile(pipe,len(scores_df))
-        null_df[data_label] = np.tile('null',len(null_df))
-        scores_concat_df = scores_concat_df.append(scores_df).append(null_df)
-        perf_pval_dict[pipe] = pvalue
-        feature_rank_df[data_label] = np.tile(pipe,len(feature_rank_df))
-        feature_rank_concat_df = feature_rank_concat_df.append(feature_rank_df)
-    return scores_concat_df, perf_pval_dict, feature_rank_concat_df
 
-def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,n_splits=10,n_repeats=10,n_jobs=1):
+        #cross_val_score
+        scores_df, null_df, pvalue, feature_rank_df = getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features,compute_null,n_splits,n_repeats,n_jobs)    
+        scores_df[data_label] = np.tile(pipe,len(scores_df))
+        scores_concat_df = scores_concat_df.append(scores_df)
+        
+        if compute_null:
+            null_df[data_label] = np.tile('null',len(null_df))
+            scores_concat_df = scores_concat_df.append(null_df)
+            perf_pval_dict[pipe] = pvalue
+
+        # RFECV
+        if rank_features:
+            feature_rank_df[data_label] = np.tile(pipe,len(feature_rank_df))
+            feature_rank_concat_df = feature_rank_concat_df.append(feature_rank_df)
+
+        # explicit CV for internal vs external perfomance
+        if group_col:
+            external_scores_df = getIndependentTestSetPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,group_col,model_type,ml_model)
+            external_scores_df[data_label] = np.tile(pipe,len(external_scores_df))
+            external_scores_concat_df = external_scores_concat_df.append(external_scores_df)   
+
+    return scores_concat_df, perf_pval_dict, feature_rank_concat_df, external_scores_concat_df
+
+def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,model_type,ml_model,rank_features=False,compute_null=False,n_splits=10,n_repeats=10,n_jobs=1):
     """ Takes a model (classification or regression) instance and computes cross val scores.
         Uses repeated stratified KFold for classification and ShuffeSplit for regression.
     """     
@@ -133,10 +151,12 @@ def getMLModelPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_c
     print(' Perf mean:{:4.3f}, sd:{:4.3f}'.format(np.mean(perf),np.std(perf)))
 
     # Null model 
-    null_cv = ShuffleSplit(n_splits=n_repeats, random_state=0) #10x10xn_permutations are too many. 
-    _, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=10, n_jobs=n_jobs)
     null_df = pd.DataFrame()
-    null_df[perf_metric] = permutation_scores
+    pvalue = 1
+    if compute_null: 
+        null_cv = ShuffleSplit(n_splits=n_repeats, random_state=0) #10x10xn_permutations are too many. 
+        _, permutation_scores, pvalue = permutation_test_score(ml_model, X, y, scoring=perf_metric, cv=null_cv, n_permutations=compute_null, n_jobs=n_jobs)
+        null_df[perf_metric] = permutation_scores
 
     # Feature ranks based on RFECV
     feature_ranks_df = pd.DataFrame()
@@ -154,6 +174,77 @@ def get_feature_importance(model, X, y, perf_metric, n_jobs, step=1, cv=5):
     feature_ranks = selector.ranking_
     feature_grid_scores = selector.grid_scores_
     return feature_ranks, feature_grid_scores
+
+
+def getIndependentTestSetPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_cols,outcome_col,group_col,model_type,ml_model,n_splits=10,n_repeats=10,n_jobs=1):
+    """ Takes a model (classification or regression) instance and computes performance on an independent test set 
+        This is useful for 'BrainAge" style analysis, when you want to train on control sample and test on case sample.
+    """      
+    X = ml_df[roi_cols].values
+    X_col_names = roi_cols.copy()
+    grp1_idx = np.array(ml_df[group_col]=='internal')
+    grp2_idx = np.array(ml_df[group_col]=='external')
+
+    # Check input var types and create dummy vars if needed
+    if len(covar_continuous_cols) > 0:
+        X_continuous_covar = ml_df[covar_continuous_cols].values
+        print('Using {} continuous covar'.format(len(covar_continuous_cols)))
+        X = np.hstack((X, X_continuous_covar))
+        X_col_names += list(covar_continuous_cols)
+    if len(covar_cat_cols) > 0:
+        X_cat_covar_df = pd.get_dummies(ml_df[covar_cat_cols])
+        X_cat_covar = X_cat_covar_df.values
+        print('Using {} categorical cols as {} cat covar (dummies)'.format(covar_cat_cols,X_cat_covar.shape[1]))
+        X = np.hstack((X, X_cat_covar))
+        X_col_names += list(X_cat_covar_df.columns)
+
+    print('n of input columns: {}'.format(len(X_col_names)))
+    if model_type.lower() == 'classification':
+        y = pd.get_dummies(ml_df[outcome_col]).values[:,0]
+        print('Data shapes X {}, y {} ({})'.format(X.shape, len(y), list(ml_df[outcome_col].value_counts())))  
+        perf_metric = 'roc_auc'
+        cv = RepeatedStratifiedKFold(n_splits=n_splits,n_repeats=n_repeats,random_state=0)
+    elif model_type.lower() == 'regression':
+        y = ml_df[outcome_col].values
+        print('Data shapes X {}, y {} ({:3.2f}m, {:3.2f}sd)'.format(X.shape, len(y), np.mean(y),np.std(y)))   
+        perf_metric = 'neg_mean_squared_error'
+        cv = ShuffleSplit(n_splits=n_splits*n_repeats, random_state=0)
+    else:
+        print('unknown model type {} (needs to be classification or regression)'.format(model_type))
+
+
+    print('Using {} model with perf metric {}'.format(model_type, perf_metric))
+
+    X1 = X[grp1_idx]
+    y1 = y[grp1_idx]
+    X2 = X[grp2_idx]
+    y2 = y[grp2_idx]
+
+    scores_df_CV = pd.DataFrame()
+    for train_index, test_index in cv.split(X1):
+        X1_tr = X1[train_index]
+        y1_tr = y1[train_index]
+        X1_te = X1[test_index]
+        y1_te = y1[test_index]
+    
+        ml_model.fit(X1_tr,y1_tr)
+        y1_pred = ml_model.predict(X1_te)
+        y2_pred = ml_model.predict(X2)
+        
+        if perf_metric == 'neg_mean_squared_error':
+            perf1 = mean_squared_error(y1_te, y1_pred)
+            perf2 = mean_squared_error(y2, y2_pred)
+        else:
+            print('Unknown scoring function {}'.format(perf_metric))
+            perf1 = 0
+            perf2 = 0
+            
+        scores_df = pd.DataFrame()    
+        scores_df[perf_metric] = [perf1,perf2]
+        scores_df['test_subset'] = ['internal','external']
+        scores_df_CV = scores_df_CV.append(scores_df)
+
+    return scores_df_CV
 
 # Stat model perfs
 
