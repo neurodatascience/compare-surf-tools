@@ -66,7 +66,7 @@ def get_cluster_membership(_df,data_label,g,n_clusters):
 
 def generate_pairwise_membership(df,m_col):
     membership = df[m_col].values
-    # Just want to know if two subjects are in the same cluster (hamming will compute the inverse)
+    # Just want to know if two subjects are in the same cluster (hamming will compute the converse)
     pairwise_membership = 1-pairwise_distances(np.array(membership).reshape(-1,1),metric='hamming')
     df_membership = pd.DataFrame(columns=df['SubjID'], index=df['SubjID'],data=pairwise_membership)
     return df_membership
@@ -249,6 +249,8 @@ def getIndependentTestSetPerf(ml_df,roi_cols,covar_continuous_cols,covar_cat_col
 # Stat model perfs
 
 def getCorrectedPValues(pval_raw,alpha=0.05,method='fdr_i'):
+    """ Returns corrected p values based on multiple comparison criterion 
+    """
     rej, pval_corr = smm.multipletests(pval_raw, alpha=alpha, method=method)[:2]
     return pval_corr
 
