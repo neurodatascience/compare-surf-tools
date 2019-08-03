@@ -16,6 +16,9 @@ import scipy.cluster.hierarchy as sch
 import collections
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.metrics import mean_squared_error
+from dask import compute, delayed
+import dask.multiprocessing
+from sklearn.utils import resample
 
 # Simple correlations of features
 def cross_correlations(df1,df2,subject_ID_col):
@@ -54,22 +57,34 @@ def calculate_pvalues(df):
     return pvalues
 
 # cluster memberships
-def get_cluster_membership(_df,data_label,g,n_clusters):
-    member_df = _df[['SubjID']].copy()
-    Z = g.dendrogram_row.linkage
-    T = sch.fcluster(Z, n_clusters, 'maxclust')
-    member_count = collections.Counter(T)
-    pipe = _df[data_label].values[0]
-    print('{} {}, cluster sizes {}'.format(data_label, pipe, member_count))
-    member_df['membership_{}'.format(pipe)] = T
-    return member_df
+def get_bootstrapped_membership_overlap_distribution(X, cluster, n_boot=100):
+    """ Resamples feature space (with replacement) and performs hierarchical clustering
+    """
+        
+    # cluster original sample
+    L_orig = cluster.fit_predict(X)
+    L_orig_pairwise_membership = 1-pairwise_distances(L_orig.reshape(-1,1),metric='hamming')
+    
+    X_samp_list = [resample(X.T).T for i in range(n_boot)]
+        
+    values = [delayed(get_pairwise_membership_overlap)(X_samp,cluster,L_orig_pairwise_membership) for X_samp in X_samp_list]
+    overlap_list = compute(*values, scheduler='threads')
+        
+    return L_orig_pairwise_membership, np.array(overlap_list)
 
-def generate_pairwise_membership(df,m_col):
-    membership = df[m_col].values
-    # Just want to know if two subjects are in the same cluster (hamming will compute the converse)
-    pairwise_membership = 1-pairwise_distances(np.array(membership).reshape(-1,1),metric='hamming')
-    df_membership = pd.DataFrame(columns=df['SubjID'], index=df['SubjID'],data=pairwise_membership)
-    return df_membership
+def get_pairwise_membership_overlap(X_samp,cluster,orig_pairwise_membership):
+    n_samples = X_samp.shape[0]
+    n_unique_pairs = n_samples*(n_samples-1)/2
+    
+    # cluster the sample       
+    L_samp = cluster.fit_predict(X_samp)
+    L_samp_pairwise_membership = 1-pairwise_distances(L_samp.reshape(-1,1),metric='hamming')
+
+    # compute consistency of the sample w.r.t. original memberships
+    pairwise_membership_consistancy = orig_pairwise_membership == L_samp_pairwise_membership                       
+    overlap = np.triu(pairwise_membership_consistancy,k=1).sum()/n_unique_pairs        
+    
+    return overlap
 
     
 # ML model perfs
