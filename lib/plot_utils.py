@@ -68,6 +68,7 @@ def create_surface_plot(common_space,hemi,surf,aparc_file,signific_rois,save_dir
         for roi in signific_rois:
             idx.append(names.index(roi))
 
+        #print('idx-betas \n{} \n{}'.format(list(zip(idx,signifcance_color)), np.array(names)[idx]))
         roi_value = np.zeros(len(names)) #np.random.randint(5, size=len(names)) #np.zeros(len(names))
         if len(signifcance_color) == 0:
             roi_value[idx] = np.arange(2,len(idx)+2) #random signifcance_color
@@ -130,6 +131,69 @@ def createImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4,trans
     print("Found {} images".format(len(imagex)))
 
     n_row = num_img_views #lh,rh,med,lat
+    if len(imagex)%n_row == 0: #Make sure each atlas / tool have same number (4x) of images 
+        n_col = len(imagex)//n_row
+
+        #creates a new empty image, RGB mode
+        #montage_size = (n_row*pane_size,n_col*pane_size)
+        if transpose:
+            montage_size = (n_row*pane_size,n_col*pane_size)
+        else:
+            montage_size = (n_col*pane_size,n_row*pane_size)
+            
+        montage_im = Image.new('RGB', montage_size,color=(255,255,255,0))
+
+        print('montage size {}'.format(montage_size))
+        
+        imx = 0
+        #Iterate through a grid 
+        for i in range(0,(n_col)*pane_size, pane_size):
+            for j in range(0,(n_row)*pane_size, pane_size):                                   
+                #opn image
+                img_file = imagex[imx]
+                im = Image.open(img_dir + img_file)
+
+                #insert title
+                draw = ImageDraw.Draw(im)
+                draw.text(text_loc,img_file,font_color,font=font)
+
+                #resize
+                im.thumbnail((thumb_size,thumb_size))
+
+                #paste the image at location i,j:
+                if transpose:
+                    montage_im.paste(im, (j,i))
+                else:    
+                    montage_im.paste(im, (i,j))
+
+                imx+=1
+
+    else:
+        print("Not all pipeline vaiations (e.g. tools,atlases) have same number of images.")
+        montage_im = None
+        
+    return montage_im
+
+
+def createSingleImageMontage(img_dir,thumb_size=200,font_size=24,num_img_views=4,transpose=False):
+    """
+    Creates montage with 4 views for a single image.
+    Views used: lh,rh,lat,med
+    """
+    
+    # Montage properties (size and text)
+    thumb_size = thumb_size
+    pane_size = thumb_size + thumb_size//10 #Add 10%padding
+    font = ImageFont.truetype("arial.ttf", font_size)
+    font_color = (0,0,0)
+    text_loc = (thumb_size//10,thumb_size//10)
+
+    # Get list of all images in the directory 
+    print("Reading images from {}".format(img_dir))
+    imagex =  sorted(next(os.walk(img_dir))[2])
+    print("Found {} images".format(len(imagex)))
+
+    n_row = 2
     if len(imagex)%n_row == 0: #Make sure each atlas / tool have same number (4x) of images 
         n_col = len(imagex)//n_row
 
