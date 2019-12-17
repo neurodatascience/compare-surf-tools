@@ -189,7 +189,7 @@ def standardize_fs60_data(fs60_data_lh, fs60_data_rh, subject_ID_col, aparc='apa
     fs60_col_renames ={}
     for roi in fs60_data.columns:
         prefix = None
-        if roi not in [subject_ID_col,'lh_MeanThickness_thickness','rh_MeanThickness_thickness']:
+        if roi not in [subject_ID_col,'lh_MeanThickness_thickness','rh_MeanThickness_thickness','lh_temporalpole_thickness','rh_temporalpole_thickness']:
             if roi.split('_',1)[0] == 'lh':
                 prefix = 'L'
             elif roi.split('_',1)[0] == 'rh':
