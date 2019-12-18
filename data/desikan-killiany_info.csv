@@ -1,0 +1,84 @@
+label,hemisphere,structure,yeo_7,von_economo
+lateralorbitofrontal,R,cortex,limbic,primary/secondary sensory
+parsorbitalis,R,cortex,default mode,primary/secondary sensory
+frontalpole,R,cortex,limbic,association
+medialorbitofrontal,R,cortex,limbic,primary/secondary sensory
+parstriangularis,R,cortex,ventral attention,association
+parsopercularis,R,cortex,ventral attention,association
+rostralmiddlefrontal,R,cortex,frontoparietal,association
+superiorfrontal,R,cortex,default mode,association
+caudalmiddlefrontal,R,cortex,frontoparietal,association
+precentral,R,cortex,somatomotor,primary motor
+paracentral,R,cortex,somatomotor,primary motor
+rostralanteriorcingulate,R,cortex,default mode,limbic
+caudalanteriorcingulate,R,cortex,ventral attention,limbic
+posteriorcingulate,R,cortex,ventral attention,limbic
+isthmuscingulate,R,cortex,default mode,limbic
+postcentral,R,cortex,somatomotor,primary sensory
+supramarginal,R,cortex,ventral attention,association
+superiorparietal,R,cortex,dorsal attention,association
+inferiorparietal,R,cortex,default mode,association
+precuneus,R,cortex,default mode,association
+cuneus,R,cortex,visual,primary/secondary sensory
+pericalcarine,R,cortex,visual,primary sensory
+lateraloccipital,R,cortex,visual,primary/secondary sensory
+lingual,R,cortex,visual,primary/secondary sensory
+fusiform,R,cortex,visual,association
+parahippocampal,R,cortex,visual,limbic
+entorhinal,R,cortex,limbic,limbic
+temporalpole,R,cortex,limbic,association
+inferiortemporal,R,cortex,limbic,association
+middletemporal,R,cortex,default mode,association
+bankssts,R,cortex,somatomotor,association
+superiortemporal,R,cortex,somatomotor,association
+transversetemporal,R,cortex,somatomotor,primary sensory
+insula,R,cortex,ventral attention,insular
+thalamusproper,R,subcortex,subcortex,subcortex
+caudate,R,subcortex,subcortex,subcortex
+putamen,R,subcortex,subcortex,subcortex
+pallidum,R,subcortex,subcortex,subcortex
+accumbensarea,R,subcortex,subcortex,subcortex
+hippocampus,R,subcortex,subcortex,subcortex
+amygdala,R,subcortex,subcortex,subcortex
+lateralorbitofrontal,L,cortex,limbic,primary/secondary sensory
+parsorbitalis,L,cortex,default mode,primary/secondary sensory
+frontalpole,L,cortex,limbic,association
+medialorbitofrontal,L,cortex,limbic,primary/secondary sensory
+parstriangularis,L,cortex,default mode,association
+parsopercularis,L,cortex,ventral attention,association
+rostralmiddlefrontal,L,cortex,frontoparietal,association
+superiorfrontal,L,cortex,default mode,association
+caudalmiddlefrontal,L,cortex,default mode,association
+precentral,L,cortex,somatomotor,primary motor
+paracentral,L,cortex,somatomotor,primary motor
+rostralanteriorcingulate,L,cortex,default mode,limbic
+caudalanteriorcingulate,L,cortex,ventral attention,limbic
+posteriorcingulate,L,cortex,ventral attention,limbic
+isthmuscingulate,L,cortex,default mode,limbic
+postcentral,L,cortex,somatomotor,primary sensory
+supramarginal,L,cortex,ventral attention,association
+superiorparietal,L,cortex,dorsal attention,association
+inferiorparietal,L,cortex,default mode,association
+precuneus,L,cortex,default mode,association
+cuneus,L,cortex,visual,primary/secondary sensory
+pericalcarine,L,cortex,visual,primary sensory
+lateraloccipital,L,cortex,visual,primary/secondary sensory
+lingual,L,cortex,visual,primary/secondary sensory
+fusiform,L,cortex,visual,association
+parahippocampal,L,cortex,default mode,limbic
+entorhinal,L,cortex,limbic,limbic
+temporalpole,L,cortex,limbic,association
+inferiortemporal,L,cortex,limbic,association
+middletemporal,L,cortex,default mode,association
+bankssts,L,cortex,default mode,association
+superiortemporal,L,cortex,somatomotor,association
+transversetemporal,L,cortex,somatomotor,primary sensory
+insula,L,cortex,ventral attention,insular
+thalamusproper,L,subcortex,subcortex,subcortex
+caudate,L,subcortex,subcortex,subcortex
+putamen,L,subcortex,subcortex,subcortex
+pallidum,L,subcortex,subcortex,subcortex
+accumbensarea,L,subcortex,subcortex,subcortex
+hippocampus,L,subcortex,subcortex,subcortex
+amygdala,L,subcortex,subcortex,subcortex
+brainstem,L,subcortex,subcortex,subcortex
