@@ -10,7 +10,7 @@ An extension of BrainHack Project (https://github.com/companat/compare-surf-tool
   - Manual / visual outlier detection
   - Automatic outlier detection 
     
-![alt text](https://github.com/neurodatascience/compare-surf-tools/blob/master/preproc_pipeline_tree.jpg)
+![alt text](Fig1_Workflow.png)
 
 
 ## Data
@@ -59,7 +59,7 @@ A. Data parsing
 python get_vertex_data_fs.py -s ../data/subjects/ -k '.fwhm20.fsaverage.mgh' -o ../data/sample_output/fs_fsaverage_vout
 ```
 
-- run scripts/get_roi_data_fs.py on a FS subject dir to get ROI-wise summay CSV for all subjects. Uses aparcstats2table command. 
+- run scripts/get_roi_data_fs.py on a FS subject dir to get ROI-wise summay CSV for all subjects. This script uses aparcstats2table command. 
 ```
 python get_roi_data_fs.py -s ../data/subjects -l ../data/subject_list.txt -m thickness -p a2009s -o ../data/sample_output/
 ```
