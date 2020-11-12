@@ -269,7 +269,8 @@ def getCorrectedPValues(pval_raw,alpha=0.05,method='fdr_i'):
     rej, pval_corr = smm.multipletests(pval_raw, alpha=alpha, method=method)[:2]
     return pval_corr
 
-def computeSoftwareStatsModels(df,data_label,roi_cols,covar_cols,outcome_col,signific_col,stat_model):
+
+def computeSoftwareStatsModels(df,data_label,roi_cols,covar_cols,outcome_col,signific_col,stat_model,mc_correction):
     """ Compares performance of different software outputs for a given ML Model
         Calls getStatModelPerf to get individual model performances
     """
@@ -281,14 +282,14 @@ def computeSoftwareStatsModels(df,data_label,roi_cols,covar_cols,outcome_col,sig
     for pipe in software_list:
         sm_df = df[df[data_label]==pipe]
         print('{} {}'.format(data_label, pipe))
-        scores_df = getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model)
+        scores_df = getStatModelPerf2(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model,mc_correction)
         scores_df[data_label] = np.tile(pipe,len(scores_df))
         scores_concat_df = scores_concat_df.append(scores_df)
         print('Top 10 significant regions:\n {}'.format(scores_df.sort_values(by=['p_val']).head(10)))
 
     return scores_concat_df
 
-def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model):
+def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_model,mc_correction):
     """ Creates either a OLS or Logit instance and computes t_vals, p_vals, model fit etc. 
         Does not support other models at the moment since you cannot pass an instance 
         of a stats_models without providing X and Y. 
@@ -367,7 +368,7 @@ def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_mod
             p_val_list.append(p_val)
 
         #FDR Correction
-        p_val_corr_list = getCorrectedPValues(p_val_list)
+        p_val_corr_list = getCorrectedPValues(p_val_list,method=mc_correction)
         print('Example statsmodel run:\n {}'.format(formula_string))
 
         scores_df['roi'] = roi_cols
@@ -378,6 +379,7 @@ def getStatModelPerf(sm_df,roi_cols,covar_cols,outcome_col,signific_col,stat_mod
 
     return scores_df
 
+
 def aggregate_perf(df,measure,thresh=0.05):
     """ Aggregates performance from different pipeline variations (tools, atlases)
         Currently aggregates using simple ranking 
@@ -385,10 +387,13 @@ def aggregate_perf(df,measure,thresh=0.05):
     df_agg = pd.DataFrame(columns=['roi','rank'])
     df['significance'] = df[measure] < thresh
     roi_list = df['roi'].unique()
+    coef_list = []
     rank_list = []
     for roi in roi_list:
         rank_list.append(np.sum(df[df['roi']==roi]['significance'].values))
+        coef_list.append(np.mean(df[df['roi']==roi]['coef'].values))
     df_agg['roi'] = roi_list
     df_agg['rank'] = rank_list
+    df_agg['coef'] = coef_list
     
     return df_agg

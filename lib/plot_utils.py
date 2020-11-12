@@ -94,15 +94,16 @@ def create_surface_plot(common_space,hemi,surf,aparc_file,signific_rois,save_dir
 
         if 'center' in plot_style.keys():
             c_center = plot_style['center']
-            brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True, center=c_center)
+            brain.add_data(vtx_data,colormap=colormap, alpha=1, colorbar=True, center=c_center)
         elif 'range' in plot_style.keys():
             c_min = plot_style['range'][0]
             c_max = plot_style['range'][1]
-            brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True, min=c_min,max=c_max)
+            brain.add_data(vtx_data,colormap=colormap, alpha=1, colorbar=True, min=c_min,max=c_max)
         else:
-            brain.add_data(vtx_data,colormap=colormap, alpha=.8, colorbar=True)
+            brain.add_data(vtx_data,colormap=colormap, alpha=1, colorbar=True)
 
-
+        
+        
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
